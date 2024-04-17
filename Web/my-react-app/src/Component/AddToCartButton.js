@@ -1,0 +1,39 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { MdAddShoppingCart } from "react-icons/md";
+
+
+
+const postToCart = (ProductId, quantity) => {
+	fetch(`http://localhost:3001/CustomerRoute/addToCart/${ProductId}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ quantity: quantity }),
+		credentials: 'include'
+	})
+	.then(response => {
+		if (!response.ok) {
+			throw new Error('Failed to add item to cart');
+		}
+		return response.json();
+	})
+	.then(data => {
+		console.log(data.message);
+	})
+	.catch(error => {
+		console.error('Error adding item to cart:', error);
+	});
+};
+
+const AddToCartButton = ({ ProductId, quantity }) => (
+	  <div 
+	    className="button-addtocart" 
+		onClick={ () => postToCart(ProductId, quantity) }
+	  >
+			<MdAddShoppingCart />
+      </div>
+);
+
+export default AddToCartButton;

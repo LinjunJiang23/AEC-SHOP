@@ -1,0 +1,32 @@
+* {
+	box-sizing: border-box;
+}
+
+.container-userdetail {
+	height: 500px;
+	margin: 0 auto;
+	padding: 14px 18px 18px;
+	max-width: 1000px;
+}
+
+div {
+	display: block;
+}
+
+body {
+	line-height: 20px;
+}
+
+.row-table {
+	display: table;
+	height: 100%;
+	margin-bottom: 20px;
+	width: 100%;
+}
+
+.box {
+	display: table-cell;
+	border-radius: 8px;
+	border: 1px #D5D9D9 solid;
+	position: relative;
+}

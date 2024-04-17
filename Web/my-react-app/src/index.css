@@ -1,0 +1,57 @@
+/* Basic layout styles */
+
+
+.layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure layout stretches to the full height of the viewport */
+	font-family: Roboto Slab;
+}
+
+.header {
+    background-color: orange; /* Dark background color for header */
+    color: #fff; /* White text color */
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main {
+    flex: 1; /* Allow main content to grow and fill remaining space */
+    padding: 20px;
+}
+
+.footer {
+    background-color: #333; /* Dark background color for footer */
+    color: #fff; /* White text color */
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo styles */
+.logo img {
+    height: 50px; /* Adjust the height of the logo */
+}
+
+/* ShoppingCart styles */
+.shoppingcarticon img {
+    height: 40px; /* Adjust the height of the shopping cart icon */
+}
+
+/* Contact info styles */
+.contact {
+    display: flex;
+    gap: 20px;
+}
+
+.contact a {
+    color: #fff; /* White text color for contact links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.contact a:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
