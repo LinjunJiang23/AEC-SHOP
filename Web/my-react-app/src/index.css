@@ -1,57 +1,52 @@
-/* Basic layout styles */
-
-
 .layout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Ensure layout stretches to the full height of the viewport */
-	font-family: Roboto Slab;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the layout fills the entire viewport */
 }
 
 .header {
-    background-color: orange; /* Dark background color for header */
-    color: #fff; /* White text color */
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 20px;
+  background-color: #223F7E;
+  display: flex;
+  flex-direction: row;
+  color: #fff;
+   justify-content: space-between; /* Ensure components are evenly spaced */
+  align-items: center;
 }
 
 .main {
-    flex: 1; /* Allow main content to grow and fill remaining space */
-    padding: 20px;
+  flex: 1; /* Allow the main content to expand to fill remaining space */
+  padding: 20px;
 }
 
 .footer {
-    background-color: #333; /* Dark background color for footer */
-    color: #fff; /* White text color */
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+	padding: 20px;
+  background-color: #223F7E;
+  display: flex;
+  flex-direction: row;
+  color: #fff;
+   justify-content: space-between; /* Ensure components are evenly spaced */
+  align-items: center;
 }
 
-/* Logo styles */
-.logo img {
-    height: 50px; /* Adjust the height of the logo */
-}
-
-/* ShoppingCart styles */
-.shoppingcarticon img {
-    height: 40px; /* Adjust the height of the shopping cart icon */
-}
-
-/* Contact info styles */
 .contact {
-    display: flex;
-    gap: 20px;
+  margin-top: 20px;
+}
+
+.contact legend {
+  font-weight: bold;
+}
+
+.contact span {
+  display: block;
+  margin-bottom: 5px;
 }
 
 .contact a {
-    color: #fff; /* White text color for contact links */
-    text-decoration: none; /* Remove underline from links */
+  color: #fff;
+  text-decoration: none;
 }
 
 .contact a:hover {
-    text-decoration: underline; /* Add underline on hover */
+  text-decoration: underline;
 }

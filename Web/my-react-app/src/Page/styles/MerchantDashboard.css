@@ -1,0 +1,35 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.dashboard h1 {
+  margin-bottom: 20px;
+}
+
+.edit,
+.vieworders {
+  margin-bottom: 20px;
+   border: 1px solid #ccc; /* Add border */
+  padding: 30px; /* Add padding for better spacing */
+}
+
+.edit a,
+.vieworders a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+}
+
+.order-total {
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+.edit,
+.vieworders:hover {
+  color:#333;
+  background-color: pink;
+}

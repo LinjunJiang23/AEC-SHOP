@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MdAddShoppingCart } from "react-icons/md";
 
+import './styles/AddToCartButton.css';
 
 
 const postToCart = (ProductId, quantity) => {
@@ -32,7 +33,10 @@ const AddToCartButton = ({ ProductId, quantity }) => (
 	    className="button-addtocart" 
 		onClick={ () => postToCart(ProductId, quantity) }
 	  >
-			<MdAddShoppingCart />
+			<MdAddShoppingCart 
+			    className="cart-icon" 
+			    size={50} // Adjust the size of the icon as needed
+			    color="#fff" />
       </div>
 );
 

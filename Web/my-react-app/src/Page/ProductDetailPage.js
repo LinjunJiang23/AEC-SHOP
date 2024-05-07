@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import AddToCartButton from '../Component/AddToCartButton';
 
+import './styles/ProductDetailPage.css';
+
 const ProductDetail = ({ product, setQuantity }) => {
    console.log("Parsed JSON data:", product);
 

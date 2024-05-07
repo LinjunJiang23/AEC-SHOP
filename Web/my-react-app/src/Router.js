@@ -7,8 +7,8 @@ import ShoppingCart from './Component/ShoppingCart';
 import Login from './Component/Login';
 import UserIcon from './Component/UserIcon';
 import Logo from './Component/Logo';
+import MerchantLogin from './Component/MerchantLogin';
 import { Auth } from './Component/Auth';
-
 
 // Import all pages
 import Main from './Page/Main';
@@ -16,7 +16,11 @@ import ShoppingCartPage from './Page/ShoppingCartPage';
 import ProductDetailPage from './Page/ProductDetailPage';
 import LoginFormPage from './Page/LoginFormPage';
 import RegisterFormPage from './Page/RegisterFormPage';
+import MerchantLoginPage from './Page/MerchantLoginPage';
 import UserDetailPage from './Page/UserDetailPage';
+import MerchantDashboard from './Page/MerchantDashboard';
+import EditListingPage from './Page/EditListingPage';
+import OrderManagementPage from './Page/OrderManagementPage';
 
 // Import styles
 import './index.css';
@@ -39,6 +43,7 @@ const Layout = ({ isPending, authenticated, children }) => (
 					<UserIcon />
 				) : <Login />
 			}
+			<MerchantLogin />
 			<ShoppingCart />
 		</div>
 		<div className="main">
@@ -70,14 +75,48 @@ const Layout = ({ isPending, authenticated, children }) => (
 	
 );
 
-
+const MerchantLayout = ({ isPending, children }) => (
+	<div className="layout">
+		<div className="header" style={{
+			 opacity: isPending ? 0.5 : 1
+		}}>
+		    <Logo />
+		</div>
+		<div className="main">
+			{children}
+		</div>
+		<div className="footer">
+			<Logo />
+			<div className="contact">
+				<fieldset>
+					<legend>Contact Me</legend>
+					<span>Email:</span>
+					<a 
+					  href="mailto:goodjl233@gmail.com"
+					  className="upgrade-contact-email"
+					>
+					goodjl233@gmail.com
+					</a>
+					<span>Phone:</span>
+					<a
+				      href="tel:7042945001"
+					  className="upgrade-contact-phone"
+					>
+					(704)294-5001
+					</a>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+);
 
 // Router
 const RouterComponent = () => {
 	const [page, setPage] = useState('/');
 	const [isAuthenticated, setAuthentication] = useState(false);
+	const [isAdmin, setAdminAuth] = useState(false);
 	const [isPending, startTransition] = useTransition();
-	const { authenticated } = useContext(Auth);
+	const { authenticated, adminauth } = useContext(Auth);
 	const navigate = (url) => {
 		startTransition(() => {
 			setPage(url);
@@ -87,17 +126,19 @@ const RouterComponent = () => {
 	 useEffect(() => {
         const fetchUserAuthentication = () => {
             setAuthentication(authenticated);
-			console.log("Authentication status is:", isAuthenticated);
+			setAdminAuth(adminauth);
+			console.log("Authentication status is:", isAuthenticated, adminauth);
         };
 
         startTransition(() => {
             fetchUserAuthentication();
         });
-    }, [startTransition, authenticated]);
+    }, [startTransition, authenticated, adminauth]);
 	
 	return (
 		<Router>
 			<Routes>
+			  // All the following are Customer Routes
 			  <Route 
 				exact path="/"
 				element={
@@ -155,6 +196,41 @@ const RouterComponent = () => {
 							authenticated={isAuthenticated}>
 						<UserDetailPage />
 					</Layout>
+				}
+			  />
+			  <Route
+			    path="/merchantlogin"
+				element={
+					<Layout isPending={isPending}
+							authenticated={isAuthenticated}>
+						<MerchantLoginPage />
+					</Layout>
+				}
+			  />
+			  
+			  // All the following are Merchant Routes
+			  <Route
+			    path="/dashboard"
+				element={
+					<MerchantLayout isPending={isPending}>
+						<MerchantDashboard />
+					</MerchantLayout>
+				}
+			  />
+			  <Route
+			    path="/dashboard/edit"
+				element={
+					<MerchantLayout isPending={isPending}>
+						<EditListingPage />
+					</MerchantLayout>
+				}
+			  />
+			  <Route
+			    path="/dashboard/orderdetails"
+				element={
+					<MerchantLayout isPending={isPending}>
+						<OrderManagementPage />
+					</MerchantLayout>
 				}
 			  />
 			</Routes>

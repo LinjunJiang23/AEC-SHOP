@@ -2,6 +2,9 @@ import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Auth } from '../Component/Auth';
 
+import './styles/LoginFormPage.css';
+
+
 const LoginForm = () => {
 	const [accountName, setAccountName] = useState('');
 	const [pw, setPassword] = useState('');
@@ -17,7 +20,9 @@ const LoginForm = () => {
 			nav("/"); // Navigate to the homepage after successful login
 		} catch (error) {
 			setError(error.message); // Display any error message
+			return;
 		}
+		
 	};
 
 	
@@ -38,7 +43,7 @@ const LoginForm = () => {
 			required 
 		  />
 		  <button type="submit">Login</button>
-		  {error && <div>{error}</div>}
+		  {error && <div className="error-userlogin">{error}</div>}
 		</form>
 	);
 };
@@ -46,11 +51,11 @@ const LoginForm = () => {
 
 const LoginFormPage = () => {
 	return (
-		<div>
+		<div class="login-form">
 			<h1>Login</h1>
 			<LoginForm />
 			<Link to="/registerform">
-				<h3>Register</h3>
+				<span>Register</span>
 			</Link>
 		</div>
 	);

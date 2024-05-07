@@ -1,0 +1,18 @@
+.button-purchase {
+  position: relative;
+}
+
+.button-purchase a {
+  display: block;
+  color: #333; /* Change icon color */
+  text-decoration: none;
+}
+
+.button-purchase a:hover {
+  color: #007bff; /* Change icon color on hover */
+}
+
+.button-purchase svg {
+  width: 30px; /* Adjust icon size */
+  height: auto; /* Maintain aspect ratio */
+}

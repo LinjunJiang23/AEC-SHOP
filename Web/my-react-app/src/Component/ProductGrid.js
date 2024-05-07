@@ -1,31 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
+// Component
 import AddToCartButton from '../Component/AddToCartButton';
+
+// Function
+import Fetch from '../lib/Fetch';
+
+// Styles
 import './styles/ProductGrid.css';
 
-const urlBase = 'http://localhost:3001/CustomerRoute/productGeneral';
 
-const fetchProduct = async () => {
-  try {
-    const response = await fetch(urlBase, {
-		method: 'GET',
-		credentials: 'include'
-	});
-    if (!response.ok) {
-      throw new Error('Failed to fetch product data');
-    }
-    const data = await response.json();
-	console.log('Parsed JSON data:', data)
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return [];
-  }
-}
 
 const ProductCard = ({ product }) => (
-   
-   <>
+   <div className="productcard">
      <Link to={`/productdetail/${product.product_id}`}
 		style={{ textDecoration: 'none' }} 
 	 >
@@ -36,7 +24,7 @@ const ProductCard = ({ product }) => (
        </div>
      </Link>
      <AddToCartButton ProductId={product.product_id} quantity={"1"}/>
-  </>
+  </div>
 );
 
 const ProductRow = ({ products }) => (
@@ -53,7 +41,7 @@ const ProductGrid = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetchProduct().then(data => setProducts(data));
+    Fetch("product", null).then(data => setProducts(data));
   }, []);
 
   return <ProductRow products={products} />;

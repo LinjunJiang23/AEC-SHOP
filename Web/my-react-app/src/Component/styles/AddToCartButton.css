@@ -1,0 +1,29 @@
+.button-addtocart {
+  display: inline-block;
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center; /* Center the text horizontally */
+}
+
+.button-addtocart:hover {
+  background-color: #0056b3;
+}
+
+.button-addtocart:focus {
+  outline: none; /* Remove focus outline */
+}
+
+/* Style for the icon inside the button */
+.button-addtocart svg {
+  vertical-align: middle; /* Align the icon vertically */
+  margin-right: 5px; /* Add margin to the right of the icon */
+}
+
+.cart-icon {
+  vertical-align: middle; /* Align the icon vertically */
+  margin-right: 5px; /* Add margin to the right of the icon */
+}

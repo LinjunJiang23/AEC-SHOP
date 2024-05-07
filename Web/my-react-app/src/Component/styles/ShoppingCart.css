@@ -1,0 +1,32 @@
+.shoppingcarticon {
+  position: relative;
+}
+
+.shoppingcarticon a {
+  display: block;
+  color: #333; /* Change icon color */
+  text-decoration: none;
+}
+
+.shoppingcarticon a:hover {
+  color: #007bff; /* Change icon color on hover */
+}
+
+.shoppingcarticon svg {
+  width: 30px; /* Adjust icon size */
+  height: auto; /* Maintain aspect ratio */
+  color: pink;
+}
+
+/* Style for badge */
+.shoppingcart-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #007bff; /* Badge background color */
+  color: #fff; /* Badge text color */
+  border-radius: 50%; /* Make badge circular */
+  padding: 5px; /* Adjust padding */
+  font-size: 12px; /* Adjust font size */
+  font-weight: bold; /* Make badge text bold */
+}

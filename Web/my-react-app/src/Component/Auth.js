@@ -1,12 +1,17 @@
 import React, { createContext, useState } from 'react';
 
+// function
+import Fetch from '../lib/Fetch';
+
 const Auth = createContext();
 
 const AuthProvider = ({ children }) => {
 	const [authenticated, setAuthenticated] = useState(false);
-	const [UserId, setUserId] = useState();
+	const [adminauth, setAdminAuth] = useState(false);
+	const [User, setUser] = useState();
+	const [Admin, setAdmin] = useState();
 	
-	// Log in function for login validation
+	// Functions
 	const login = async (accountName, pw) => {
 		// Fetch user data to determine whether logged in or not
 		try {
@@ -19,50 +24,73 @@ const AuthProvider = ({ children }) => {
 				credentials: 'include'
 			});
 			if (!response.ok) {
+				setUser();
 				setAuthenticated(false);
-				throw new Error('Login failed');
-			}
-			else
-			{
+				throw new Error('Invalid password or account name.');
+			} else {
+				setUser(response.json());
 				setAuthenticated(true);
 			}
 			// Store JWT token in local storage
 		} catch (error) {
+			setUser();
 			setAuthenticated(false);
 			console.error(error);
+			throw new Error('Login failed');
 		}
 	};
 	
-	// Log out function
 	const logout = () => {
+		setUser();
 		setAuthenticated(false);
 	};
 	
+	const adminlogin = async (accountName, pw) => {
+		try {
+			console.log(accountName);
+			console.log(pw);
+			const response = await fetch('http://localhost:3001/SellerRoute/loginVal', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ accountName, pw }),
+				credentials: 'include'
+			});
+			const data = await response.json();
+			if (!response.ok) {
+				setAdmin();
+				setAdminAuth(false);
+				throw new Error("Invalid password or account name.");
+			} else {
+				setAdmin(data);
+				setAdminAuth(true);
+			}
+		} catch (err) {
+			setAdmin();
+			setAdminAuth(false);
+			console.error(err);
+			throw new Error("Login failed");
+		}
+	};
+	
+	const adminlogout = () => {
+		setAdmin();
+		setAdminAuth(false);
+	};
 	
 	const getUserId = async () => {
-    try {
-        const response = await fetch('http://localhost:3001/CustomerRoute/user',{
-			method: 'GET',
-			credentials: 'include'
-		});
-        if (!response.ok) {
-            return false;
-        }
-        const data = await response.json();
-		console.log("The user id get is:", data);
-        const fetchedUserId = data.UserId; // Access UserId from the response JSON
-        console.log(fetchedUserId); // Log the user ID
-        setUserId(fetchedUserId); // Update the state with the fetched user ID
-        return fetchedUserId;
-    } catch (error) {
-        console.error('Error fetching user ID:', error);
-        return false;
-    }            
-};
+		const userId = await Fetch("userid");   
+		return userId;
+	};
    
-
+	const getAdminId = async () => {
+	   const adminId = await Fetch("adminid");
+	   return adminId;
+	};
+	
 	return (
-	  <Auth.Provider value={{ authenticated, login, logout, getUserId }}>
+	  <Auth.Provider value={{ authenticated, adminauth, User, Admin, login, logout, adminlogin, adminlogout, getUserId, getAdminId }}>
 		{children}
 	  </Auth.Provider>
 	);

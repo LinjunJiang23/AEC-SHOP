@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Auth } from '../Component/Auth';
 
+// Function
+import { Auth } from '../Component/Auth';
+import Fetch from '../lib/Fetch';
 
 // Styles
 import { CiSquarePlus } from "react-icons/ci";
 import { CiSquareMinus } from "react-icons/ci";
-
+import './styles/ShoppingCartPage.css';
 const ShoppingCartItem = ({ item }) => (
   <>
     <Link to={`/productdetail/${item.product_id}`} style={{ textDecoration: 'none' }}>
@@ -50,39 +52,15 @@ const ShoppingCartRow = ({ items }) => {
   }
 };
 
-const useFetchItems = () => {
-  const { getUserId } = useContext(Auth);
-
-  const fetchShoppingCart = async () => {
-    try {
-      const userId = await getUserId();
-      console.log(userId);
-      const response = await fetch('http://localhost:3001/CustomerRoute/getShoppingCart', {
-		method: 'GET',
-		credentials: 'include'
-	  });
-      if (!response.ok) {
-        throw new Error('Failed to fetch shopping cart items');
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching shopping cart:', error);
-      return [];
-    }
-  };
-
-  return fetchShoppingCart; // Return the fetch function
-};
 
 const ShoppingCartPage = () => {
   const [items, setItems] = useState([]);
-  const fetchItems = useFetchItems(); // Call the custom hook to get the fetchItems function
-
+  const { getUserId } = useContext(Auth);
   useEffect(() => {
     // Call fetchItems to fetch items when component mounts
     const fetchData = async () => {
-      const itemsData = await fetchItems();
+	  const userId = getUserId();
+      const itemsData = await Fetch("shoppingcart", userId);
       setItems(itemsData);
     };
     fetchData();
@@ -93,7 +71,8 @@ const ShoppingCartPage = () => {
     <h1>Shopping Cart</h1>
 	<ShoppingCartRow items={items} />
 	<div className="display-total">
-		<span>Subtotal:</span> 
+		<span>Subtotal:</span>
+		<span className="subtotal">0.00</span>
 	</div>
   </div>
   );

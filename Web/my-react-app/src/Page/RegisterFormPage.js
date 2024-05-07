@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 const RegisterForm = () => {
 	const [accountName, setAccountName] = useState('');
 	const [pw, setPassword] = useState('');
@@ -51,7 +52,7 @@ const RegisterForm = () => {
 };
 
 const RegisterFormPage = () => (
-		<div>
+		<div className="login-form">
 			<h1>Register</h1>
 			<RegisterForm />
 		</div>

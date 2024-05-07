@@ -57,8 +57,8 @@ router.post('/loginValidate', (req, res) => {
                     console.log("result is:", results);
                     res.status(200).json(results);
                 } else {
-                    console.log("User or password are wrong, try again");
-                    res.status(401).json({ error: "User or password are wrong, try again" });
+                    console.log("User name or password are wrong, try again");
+                    res.status(401).json({ error: "User name or password are wrong, try again" });
                 }
             }
         }

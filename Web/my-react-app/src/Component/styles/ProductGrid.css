@@ -1,56 +1,61 @@
+.productgrid {
+  padding: 20px; /* Adjust padding as needed */
+}
+
 .summary-product-grid {
-	background-color: #F2C19A;
-	display: flex;
-	flex-direction: row;
-	list-style-type: none;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust column width as needed */
+  gap: 20px; /* Adjust gap between items as needed */
+}
+
+.productcard {
+  border: 1px solid #ccc; /* Add border around each product card */
+  padding: 10px; /* Add padding around each product card */
+    align-items: center;
+
 }
 
 .product-summary {
-	padding: 5px;
-	justify-content: space-between;
-	align-items: center;
-	display: flex;
-	flex-direction: column;
-	height: 505px;
-	width: 300px;
-	overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .summary-image {
-	height: 450px;
+  width: 100%; /* Ensure the image fills its container */
+  height: auto; /* Maintain aspect ratio */
 }
 
 .summary-title {
-	color: black;
-	font-size: 15px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  margin-top: 10px; /* Add margin between image and title */
+  font-weight: bold; /* Make the title bold */
 }
 
 .summary-price {
-	color: red;
-	font-size: 20px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  margin-top: 5px; /* Add margin between title and price */
+  color: #007bff; /* Change price color */
 }
 
-.button-addtocart {
-	align-items: center;
+/* Style for AddToCartButton component */
+.addtocart-button {
+  margin-top: 10px; /* Add margin between product summary and add to cart button */
+  text-align: center; /* Center the button */
 }
 
-.button-addtocart img{
-	height: 35px;
+.addtocart-button button {
+  padding: 5px 10px; /* Adjust button padding */
+  background-color: #007bff; /* Button background color */
+  color: #fff; /* Button text color */
+  border: none; /* Remove button border */
+  border-radius: 5px; /* Add border radius */
+  cursor: pointer; /* Change cursor to pointer on hover */
 }
 
-.product-item {
-	background-color: #F2C19A;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+.addtocart-button button:hover {
+  background-color: #0056b3; /* Change background color on hover */
 }
 
-.detail-image {
-	height: 650px;
+.addtocart-button button:focus {
+  outline: none; /* Remove focus outline */
 }
