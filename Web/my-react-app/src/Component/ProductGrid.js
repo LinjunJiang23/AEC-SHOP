@@ -36,10 +36,12 @@ const ProductRow = ({ products }) => (
   </ul>
 );
 
-const ProductGrid = () => {
+const ProductGrid = (limit) => {
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
-    Fetch("product", null).then(data => setProducts(data));
+    FetchProduct(currentPage, limit).then(data => setProducts(data));
   }, []);
 
   return <ProductRow products={products} />;

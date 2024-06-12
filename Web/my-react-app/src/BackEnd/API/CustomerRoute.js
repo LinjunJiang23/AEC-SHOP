@@ -24,8 +24,11 @@ const getData = (query, params) => {
 
 // GET Route to display products
 router.get('/productGeneral', async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 10;
+	const offset = (page - 1) * limit;
     try {
-		const products = await getData('SELECT * FROM Product', []);
+		const products = await getData('SELECT * FROM Product LIMIT ? OFFSET ?', [limit, offset]);
 		res.status(200).json(products);
 	} catch (error) {
 		console.error('Error fetching product data:', error);
