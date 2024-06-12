@@ -1,0 +1,28 @@
+.nav-sectionbar {
+	background-color: #92E8EF;
+	height: 50px;
+	font-size: 30px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 10px;
+}
+
+div[class*="border"]:hover {
+	border-left-style: solid;
+	border-left-color: #8F92B2;
+	border-bottom-style: dotted;
+	border-bottom-color: #8F92B2;
+}
+
+.nav-sectionbar-section-left {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 60%;
+	justify-content: space-evenly;
+}
+
+.nav-sectionbar-section-right {
+	width: 30%;
+}

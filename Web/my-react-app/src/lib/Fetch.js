@@ -51,6 +51,22 @@ const Fetch = async (option, userId) => {
 			console.error('Error fetching user ID:', error);
 			return false;
 		}            
+  } else if (option === "carttotal") {
+	  try {
+			const response = await fetch('http://localhost:3001/CustomerRoute/carttotal',{
+				method: 'GET',
+				credentials: 'include'
+			});
+			if (!response.ok) {
+				return false;
+			}
+			const data = await response.json();
+			console.log("The cart total get is:", data);
+			return data;
+	  } catch (error) {
+			console.error('Error fetching cart total');
+			return false;
+	  }
   }
 }
 

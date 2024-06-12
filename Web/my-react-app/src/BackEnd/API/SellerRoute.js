@@ -1,17 +1,40 @@
 const express = require('express');
 const cors = require('cors');
 const connection = require('../db');
+const multer = require('multer');
+
 
 const app = express();
 const router = express.Router();
 
 app.use(cors({ origin: 'http://localhost:3001' }));
 
+//Storage for image upload
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+});
+
+const upload = multer({ storage: storage });
+
+
+
+
 // Route to handle adding a product
-router.post('/addProduct', (req, res) => {
-    const { productName, imgURL, productPrice, productDesc } = req.body;
-    const sql = 'INSERT INTO Product (product_name, img_url, price, description) VALUES (?, ?, ?, ?)';
-    connection.query(sql, [productName, imgURL, productPrice, productDesc], (err, result) => {
+router.post('/addProduct', upload.single('image'), (req, res) => {
+    const name = req.file.filename; // Assuming multer saves the file path
+    const imagePath = `http://localhost:3001/uploads/${name}`;
+    
+    
+    const { productName, description, price } = req.body;
+
+    // Insert image URL and product details into the database
+    const sql = 'INSERT INTO Product (img_url, product_name, price, description) VALUES (?, ?, ?, ?)';
+    connection.query(sql, [imagePath, productName, price, description], (err, result) => {
         if (err) {
             console.error("Error adding data to database", err);
             res.status(500).json({ error: 'Internal server error' });
@@ -24,8 +47,8 @@ router.post('/addProduct', (req, res) => {
 
 // Route to handle deleting a product
 router.post('/deleteProduct/:id', (req, res) => {
-	const { productId } = req.body;
-	const sql = 'DELETE FROM Product WHERE product_id == (?)';
+	const productId = req.params.id;
+	const sql = 'DELETE FROM Product WHERE product_id = (?)';
 	connection.query(sql, [productId], (err, result) => {
 		if (err) {
 			console.error("Error adding data to database", err);
@@ -38,11 +61,13 @@ router.post('/deleteProduct/:id', (req, res) => {
 });
 
 // Route to handle updating a product
-router.post('/updateProduct/:id', (req, res) => {
+router.post('/updateProduct/:id', upload.single('image'), (req, res) => {
 	const productId = req.params.id;
-	const { productName, productPrice, productDesc } = req.body;
-	const sql = 'UPDATE Product SET product_name = ?, price = ?, description = ? WHERE product_id = ?';
-	connection.query(sql, [productName, productPrice, productDesc, productId], (err, result) => {
+	const name = req.file.filename; // Assuming multer saves the file path
+    const imagePath = `http://localhost:3001/uploads/${name}`;
+	const { productName, description, price } = req.body;
+	const sql = 'UPDATE Product SET product_name = ?, price = ?, description = ?, img_url = ? WHERE product_id = ?';
+	connection.query(sql, [productName, price, description, imagePath, productId], (err, result) => {
 		if (err) {
 			console.error("Error updating product in database:", err);
 			res.status(500).json({ error: 'Internal server error' });

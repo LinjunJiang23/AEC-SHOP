@@ -25,7 +25,7 @@ app.use(bodyParser.json()); // Parse JSON bodies
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 // Serve static images
-app.use('/images', express.static('images'));
+app.use('/uploads', express.static('uploads'));
 
 // Mount API routes
 app.use('/SellerRoute', SellerRoute);

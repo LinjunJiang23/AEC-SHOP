@@ -1,10 +1,8 @@
 const connection = require('../db');
 
 
-const insert_shopping_cart_item_before_trigger = `
-	CREATE TRIGGER insert_shopping_cart_item_before_trigger
-	BEFORE INSERT ON Shopping_Cart_Item
-	FOR EACH ROW
+const insert_shopping_cart_item = `
+	CREATE PROCEDURE insert_shopping_cart_item
 	BEGIN
 		-- Check if Shopping_Cart has the cart for this user
 		IF ((SELECT cart_id FROM Shopping_Cart WHERE user_id = NEW.user_id) IS NULL) THEN

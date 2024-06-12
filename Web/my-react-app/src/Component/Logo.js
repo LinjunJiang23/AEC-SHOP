@@ -1,13 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import LOGO from './logo.png';
 import './styles/Logo.css';
 
-const Logo = () => (
+const Logo = ({ logoSrc, mainLink }) => (
     <div className="logo">
-        <Link to="/">
+        <Link to={mainLink}>
             <img 
-                src={LOGO}
+                src={logoSrc}
                 alt="logo"
             />
         </Link>
