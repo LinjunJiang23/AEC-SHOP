@@ -7,10 +7,7 @@ const FetchProduct = async (page, limit) => {
         params: { page, limit },
         withCredentials: true
       });
-      if (!response.ok) {
-        throw new Error('Failed to fetch product data');
-      }
-	  const results = response.data;
+	  const results = response;
       console.log('Parsed JSON data:', results);
       return results;
     } catch (error) {

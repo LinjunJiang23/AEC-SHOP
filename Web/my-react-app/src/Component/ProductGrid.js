@@ -1,50 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
 // Component
-import AddToCartButton from '../Component/AddToCartButton';
+import AddToCartButton from './AddToCartButton';
+import ProductRow from './ProductRow';
+import PageDisplay from './PageDisplay';
 
 // Function
-import Fetch from '../lib/Fetch';
+import FetchProduct from '../lib/FetchProduct';
 
 // Styles
 import './styles/ProductGrid.css';
 
-
-
-const ProductCard = ({ product }) => (
-   <div className="productcard">
-     <Link to={`/productdetail/${product.product_id}`}
-		style={{ textDecoration: 'none' }} 
-	 >
-       <div className="product-summary">
-         <img className="summary-image" src={product.img_url} alt={product.product_name} />
-         <span className="summary-price">${product.price}</span>
-       </div>
-     </Link>
-     <AddToCartButton ProductId={product.product_id} quantity={"1"}/>
-  </div>
-);
-
-const ProductRow = ({ products }) => (
-  <ul className="summary-product-grid">
-    {products.map((product, index) => (
-      <li key={index}>
-        <ProductCard product={product} />
-      </li>
-    ))}
-  </ul>
-);
-
-const ProductGrid = (limit) => {
+const ProductGrid = ({ section, limit, style, paginationStyle }) => {
   const [products, setProducts] = useState([]);
-  const [currentPage, setCurrentPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
-    FetchProduct(currentPage, limit).then(data => setProducts(data));
-  }, []);
+    FetchProduct(currentPage, limit)
+	.then(results => {
+		setProducts(results.data);
+		setCurrentPage(results.page);
+		setTotalPages(results.totalPages);
+		});
+  }, [currentPage, limit]);
+  
+  const handlePageChange = (newPage) => {
+	setCurrentPage(newPage);
+  };
 
-  return <ProductRow products={products} />;
+  return (
+	<div className="container-product-grid">
+	  <ProductRow products={products} />
+	  <PageDisplay 
+	    currentPage={currentPage} 
+		totalPages={totalPages} 
+		onPageChange={handlePageChange} 
+      />
+	</div>
+  );
 };
 
 export default ProductGrid;

@@ -1,7 +1,8 @@
 import React, { createContext, useState } from 'react';
 
 // function
-import Fetch from './Fetch';
+import FetchUser from './FetchUser';
+import FetchAdmin from './FetchAdmin';
 
 const Auth = createContext();
 
@@ -81,12 +82,12 @@ const AuthProvider = ({ children }) => {
 	};
 	
 	const getUserId = async () => {
-		const userId = await Fetch("userid");   
+		const userId = await FetchUser("userid");   
 		return userId;
 	};
    
 	const getAdminId = async () => {
-	   const adminId = await Fetch("adminid");
+	   const adminId = await FetchAdmin("adminid");
 	   return adminId;
 	};
 	

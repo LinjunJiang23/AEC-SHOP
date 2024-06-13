@@ -29,7 +29,16 @@ router.get('/productGeneral', async (req, res) => {
 	const offset = (page - 1) * limit;
     try {
 		const products = await getData('SELECT * FROM Product LIMIT ? OFFSET ?', [limit, offset]);
-		res.status(200).json(products);
+		const totalResults = await getData('SELECT COUNT(*) AS count FROM Product', []);
+		const totalItems = totalResults[0].count;
+		const totalPages = Math.ceil(totalItems / limit);
+		res.status(200).json({
+			data: products,
+			page,
+			limit,
+			totalPages,
+			totalItems
+		});	
 	} catch (error) {
 		console.error('Error fetching product data:', error);
 		res.status(500).json({ error: 'Internal server error' });
