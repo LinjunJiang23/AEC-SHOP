@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Fetch from '../../lib/Fetch';
+import Fetch from '../../lib/FetchProduct';
 
 const addProduct = async (formData) => {
   try {

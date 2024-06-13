@@ -1,6 +1,6 @@
 import React, { useEffect, useState, memo } from 'react';
 import { Link,  useNavigate } from 'react-router-dom';
-import Fetch from '../../lib/Fetch';
+import Fetch from '../../lib/FetchProduct';
 
 import './styles/EditListingPage.css';
 

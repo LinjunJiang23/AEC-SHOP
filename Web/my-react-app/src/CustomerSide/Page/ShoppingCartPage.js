@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 // Function
 import { Auth } from '../../lib/Auth';
-import Fetch from '../../lib/Fetch';
+import Fetch from '../../lib/FetchShoppingCart';
 
 // Styles
 import { CiSquarePlus } from "react-icons/ci";
