@@ -1,21 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Fetch from '../../lib/FetchProduct';
-
-const addProduct = async (formData) => {
-  try {
-    const response = await fetch(`http://localhost:3001/SellerRoute/addProduct`, {
-      method: 'POST',
-      body: formData
-    });
-    if (!response.ok) {
-      throw new Error('Failed to update product');
-    }
-    const data = await response.json();
-    console.log(data); // Log success message or handle response accordingly
-  } catch (error) {
-    throw new Error(`Error updating product: ${error.message}`);
-  }
-};
+import FetchProduct from '../../lib/FetchProduct';
+import AddProduct from '../../lib/AddProduct';
 
 const AddListingPage = () => {
   const [productName, setProductName] = useState('');
@@ -35,7 +20,7 @@ const AddListingPage = () => {
 	  formData.append('description', description);
 	  formData.append('price', price);
 
-      await addProduct(formData);
+      await AddProduct(formData);
       console.log("Success");
     } catch (error) {
       console.error('Error updating product:', error.message);
