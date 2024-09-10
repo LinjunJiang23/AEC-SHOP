@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
-// Component
-import AddToCartButton from './AddToCartButton';
-import ProductRow from './ProductRow';
-import PageDisplay from './PageDisplay';
+// components
+import Grid from '../../components/Grid/Grid';
 
-// Function
-import FetchProduct from '../lib/FetchProduct';
 
-// Styles
-import './styles/ProductGrid.css';
+// layouts
+import AddToCartButtonLayout from '../AddToCartButtonLayout/AddToCartButtonLayout';
+import ProductRowLayout from '../ProductRowLayout/ProductRowLayout';
+import PaginationLayout from '../PaginationLayout/PaginationLayout';
 
-const ProductGrid = ({ section, limit, style, paginationStyle }) => {
+// functions
+import fetchProducts from '../api/services/fetchProducts';
+
+// styles
+import './ProductGridLayout.css';
+
+const ProductGridLayout = ({ limit, style, paginationStyle }) => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -29,15 +34,20 @@ const ProductGrid = ({ section, limit, style, paginationStyle }) => {
   };
 
   return (
-	<div className="container-product-grid">
+	<Grid className={`product-grid ${className}` {...props}}>
 	  <ProductRow products={products} />
 	  <PageDisplay 
 	    currentPage={currentPage} 
 		totalPages={totalPages} 
 		onPageChange={handlePageChange} 
       />
-	</div>
+	</Grid>
   );
+};
+
+ProductGridLayout.propTypes = {
+	products: PropTypes.array.isRequired,
+	className: PropTypes.string,
 };
 
 export default ProductGrid;

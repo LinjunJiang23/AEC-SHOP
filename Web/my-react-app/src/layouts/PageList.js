@@ -13,21 +13,21 @@ const PageList = ({ className, currentPage, totalPages, onPageChange, pageListSt
 			}
 		} else {
 			pageNumbers.push(1);
-			
-			const startPage = Math.max(currentPage - buffer, 2);
-			if (startPage > 2) {
+			//Not sure about the logic of this part
+			  const startPage = Math.max(currentPage - buffer, 2);
+			  if (startPage > 2) {
 				pageNumbers.push('...');
-			}
-			for (let i = startPage; i < currentPage; i++) {
+			  }
+			  for (let i = startPage; i < currentPage; i++) {
 				pageNumbers.push(i);
-			}
+			  }
 			
-			pageNumbers.push(currentPage);
+			  pageNumbers.push(currentPage);
 			
-			const endPage = Math.min(currentPage + buffer, totalPages - 1);
-			for (let i = currentPage + 1; i <= endPage; i++) {
+			  const endPage = Math.min(currentPage + buffer, totalPages - 1);
+			  for (let i = currentPage + 1; i <= endPage; i++) {
 				pageNumbers.push(i);
-			}
+			  }
 			
 			if (endPage < totalPages - 1) {
 				pageNumbers.push('...');
