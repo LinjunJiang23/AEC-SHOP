@@ -1,11 +1,11 @@
 // Import layout
-import MerchantLayout from '../Component/SellerSideLayout/MerchantLayout';
+import SellerSideLayout from '../../layouts/SellerSideLayout';
 
 // Import all pages from Seller Side
-import MerchantDashboard from '../SellerSide/Page/MerchantDashboard';
-import EditListingPage from '../SellerSide/Page/EditListingPage';
-import OrderManagementPage from '../SellerSide/Page/OrderManagementPage';
-import AddListingPage from '../SellerSide/Page/AddListingPage';
+import MerchantDashboard from '../../pages/sellerSidePage/MerchantDashboard';
+import EditListingPage from '../../pages/sellerSidePage/EditListingPage';
+import OrderManagementPage from '../../pages/sellerSidePage/OrderManagementPage';
+import AddListingPage from '../../pages/sellerSidePage/AddListingPage';
 
 const SellerRouteConfig = ({ isPending, isAdmin }) => {
 	
@@ -13,41 +13,41 @@ const SellerRouteConfig = ({ isPending, isAdmin }) => {
 	{
 		path: '/dashboard',
 		element: (
-		  <MerchantLayout 
+		  <SellerSideLayout 
 			isPending={isPending} 
 			adminauth={isAdmin}>
 		      <MerchantDashboard />
-		  </MerchantLayout>
+		  </SellerSideLayout>
 		)
 	},
 	{
 		path: '/dashboard/edit',
 		element: (
-		  <MerchantLayout 
+		  <SellerSideLayout 
 			isPending={isPending} 
 			adminauth={isAdmin}>
 			  <EditListingPage />
-		  </MerchantLayout>
+		  </SellerSideLayout>
 		)
 	},
 	{
 		path: '/dashboard/orderdetails',
 		element: (
-		  <MerchantLayout 
+		  <SellerSideLayout 
 			isPending={isPending} 
 			adminauth={isAdmin}>
 			  <OrderManagementPage />
-		  </MerchantLayout>
+		  </SellerSideLayout>
 		)
 	},
 	{
 		path: '/dashboard/addnewlisting',
 		element: (
-		  <MerchantLayout 
+		  <SellerSideLayout 
 			isPending={isPending} 
 			adminauth={isAdmin}>
 			  <AddListingPage />
-		  </MerchantLayout>
+		  </SellerSideLayout>
 		)
 	}];
 	return routes;

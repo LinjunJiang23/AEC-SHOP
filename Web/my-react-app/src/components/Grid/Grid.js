@@ -1,13 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Grid = ({
-	columns = 'repeat(auto-fit, minmax(100px, 1fr))',
-	gap = '16px',
-	children,
-	className = '',
-	style = {},
-	...props
+const Grid = ({ columns, gap, children, className, style, ...props
   }) => {
 
   return (
@@ -31,6 +25,13 @@ Grid.propTypes = {
 	children: PropTypes.node.isRequired,
 	className: PropTypes.string,
 	style: PropTypes.object,
+};
+
+Grid.defaultProps = {
+	columns: 'repeat(auto-fit, minmax(100px, 1fr))',
+	gap: '16px',
+	className: '',
+	style: {},
 };
 
 export default Grid;

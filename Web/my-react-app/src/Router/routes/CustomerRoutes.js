@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import CustomerRouteConfig from './CustomerRouteConfig';
+import CustomerRouteConfig from '../routeConfigs/CustomerRouteConfig';
 
 const CustomerRoutes = ({ isPending }) => {
 	const routes = CustomerRouteConfig(isPending);

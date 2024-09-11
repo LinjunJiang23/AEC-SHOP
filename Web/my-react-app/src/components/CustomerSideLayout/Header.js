@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 
-// Import all components
-import ShoppingCart from '../ShoppingCart';
-import UserIcon from '../UserIcon';
-import Logo from '../Logo';
-import NavigateIcon from '../NavigateIcon';
+// components
+import ShoppingCartLayouts from '../ShoppingCart';
+import CSUserIconLayouts from '../UserIcon';
+import CSLogoLayouts from '../Logo';
+import CSNavigationBarLayouts from '../Navigation';
 
 
-// Import logo picture
+// static lib
 import logo from './logo.png';
 
-//Import auth context provider
+//services
 import { Auth } from '../../lib/Auth';
 
 /**
