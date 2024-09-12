@@ -9,7 +9,7 @@ app.use(cors({ origin: 'http://localhost:3001' }));
 
 
 
-//Function to get product information
+// Function to get product information
 const getData = (query, params) => {
 	return new Promise((resolve, reject) => {
 		connection.query(query, params, (err, results, fields) => {
@@ -29,11 +29,11 @@ router.get('/productGeneral', async (req, res) => {
 	const offset = (page - 1) * limit;
     try {
 		const products = await getData('SELECT * FROM Product LIMIT ? OFFSET ?', [limit, offset]);
-		const totalResults = await getData('SELECT COUNT(*) AS count FROM Product', []);
-		const totalItems = totalResults[0].count;
+		const totalItems = products.length;
 		const totalPages = Math.ceil(totalItems / limit);
+		
 		res.status(200).json({
-			data: products,
+			products: products,
 			page,
 			limit,
 			totalPages,

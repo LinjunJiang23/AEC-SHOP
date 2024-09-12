@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import axios from 'axios';
 
 // function
 import FetchUser from './FetchUser';
@@ -7,92 +8,88 @@ import FetchAdmin from './FetchAdmin';
 const Auth = createContext();
 
 const AuthProvider = ({ children }) => {
-	const [authenticated, setAuthenticated] = useState(false);
-	const [adminauth, setAdminAuth] = useState(false);
-	const [User, setUser] = useState();
-	const [Admin, setAdmin] = useState();
+	const [isLoggedIn, setLoggedIn] = useState(false);
+	const [isAdmin, setAdminAuth] = useState(false);
+	const [user, setUser] = useState();
+	const [admin, setAdmin] = useState();
 	
 	// Functions
 	const login = async (accountName, pw) => {
-		// Fetch user data to determine whether logged in or not
+		{ /* Fetch user data to determine whether logged in or not */ }
 		try {
-			const response = await fetch('http://localhost:3001/CustomerRoute/loginValidate', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ accountName, pw }),
-				credentials: 'include'
-			});
-			if (!response.ok) {
-				setUser();
-				setAuthenticated(false);
+			const response = await axios.post('http://localhost:3001/CustomerRoute/loginValidate',
+				{ accountName, pw },
+				{
+					headers: {
+					  'Content-Type': 'application/json'
+				    },
+					withCredentials: true,
+				}
+			);
+			if (response.status !== 200) {
+				setUser(null);
+				setLoggedIn(false);
 				throw new Error('Invalid password or account name.');
 			} else {
-				const data = await response.json();
-				setAuthenticated(true);
+				const data = response.data;
+				setLoggedIn(true);
 				setUser(data[0]);
 			}
 			// Store JWT token in local storage
 		} catch (error) {
-			setUser();
-			setAuthenticated(false);
+			setUser(null);
+			setLoggedIn(false);
 			console.error(error);
 			throw new Error('Login failed');
 		}
 	};
 	
 	const logout = () => {
-		setUser();
-		setAuthenticated(false);
+		setUser(null);
+		setLoggedIn(false);
+		setAdminAuth(false);
 	};
 	
 	const adminlogin = async (accountName, pw) => {
 		try {
-			console.log(accountName);
-			console.log(pw);
-			const response = await fetch('http://localhost:3001/SellerRoute/loginVal', {
-				method: 'POST',
-				headers: {
+			const response = await axios.post('http://localhost:3001/SellerRoute/loginVal',
+				{ accountName, pw },
+				{
+				  headers: {
 					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ accountName, pw }),
-				credentials: 'include'
-			});
-			const data = await response.json();
-			if (!response.ok) {
-				setAdmin();
+				  },
+				  withCredentials: true
+				}
+			);
+			const data = response.data;
+			if (response.status !== 200) {
+				setAdmin(null);
 				setAdminAuth(false);
 				throw new Error("Invalid password or account name.");
 			} else {
 				setAdmin(data);
 				setAdminAuth(true);
 			}
-		} catch (err) {
-			setAdmin();
+		} catch (error) {
+			setAdmin(null);
 			setAdminAuth(false);
-			console.error(err);
+			console.error(error);
 			throw new Error("Login failed");
 		}
 	};
 	
-	const adminlogout = () => {
-		setAdmin();
-		setAdminAuth(false);
-	};
-	
-	const getUserId = async () => {
-		const userId = await FetchUser("userid");   
-		return userId;
+	const getUser = async () => {
+		const user = await FetchUser();   
+		return user;
 	};
    
-	const getAdminId = async () => {
-	   const adminId = await FetchAdmin("adminid");
+    { /*const getAdminId = async () => {
+	   const adminId = await FetchAdmin();
 	   return adminId;
-	};
+	}; */ }
 	
 	return (
-	  <Auth.Provider value={{ authenticated, adminauth, User, Admin, login, logout, adminlogin, adminlogout, getUserId, getAdminId }}>
+	  <Auth.Provider value={{ isLoggedIn, isAdmin, user, admin, login, logout, adminlogin, getUser }}>
 		{children}
 	  </Auth.Provider>
 	);
