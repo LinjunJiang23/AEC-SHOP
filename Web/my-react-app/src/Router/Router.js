@@ -2,8 +2,8 @@ import React, { Suspense, useState, useTransition, useEffect, useContext } from 
 import { BrowserRouter as Router } from 'react-router-dom';
 
 //Import Routes
-import CustomerRoutes from './CustomerRoutes';
-import SellerRoutes from './SellerRoutes';
+import CustomerRoutes from './routes/CustomerRoutes';
+import SellerRoutes from './routes/SellerRoutes';
 
 
 // Import styles

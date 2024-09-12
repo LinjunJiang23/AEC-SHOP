@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import SellerRouteConfig from './SellerRouteConfig';
+import SellerRouteConfig from '../routeConfigs/SellerRouteConfig';
 
 const SellerRoutes = ({ isPending, isAdmin }) => {
 	const routes = SellerRouteConfig(isPending, isAdmin);

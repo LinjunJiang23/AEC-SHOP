@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { FaRegUser } from "react-icons/fa";
-import { Auth } from '../lib/Auth';
+import { Auth } from '../../api/Auth';
 
-import './styles/UserIcon.css';
+import './UserIcon.css';
 
 const UserIcon = () => {
-	const { User } = useContext(Auth);
-    const [user, setUser] = useState();
+	const { user } = useContext(Auth);
    
 	useEffect(() => {
-      setUser(User);
-	}, []);
+	}, [user]);
 	
 	return (
 	<div className="icon">

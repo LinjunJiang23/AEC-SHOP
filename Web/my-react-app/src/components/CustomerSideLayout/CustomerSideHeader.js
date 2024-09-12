@@ -1,23 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 
-// Import all components
-import ShoppingCart from '../ShoppingCart';
-import UserIcon from '../UserIcon';
-import Logo from '../Logo';
-import NavigateIcon from '../NavigateIcon';
-
-
-// Import logo picture
-import logo from './logo.png';
-
-//Import auth context provider
-import { Auth } from '../../lib/Auth';
+// components
+import ShoppingCart from './ShoppingCart';
+import UserIcon from './UserIcon';
+import Logo from './Logo';
+import Auth from '../NavigationBar';
 
 /**
    A header template that organizes all the elment in a header
    @param {boolean} isPending - identify whether element is loading or not
 */
-const Header = ({ isPending }) => {
+const CustomerSideHeader = ({ isPending }) => {
 	const [isAuthenticated, setAuthentication] = useState(false);
 	const { authenticated } = useContext(Auth);
 
@@ -41,7 +34,7 @@ const Header = ({ isPending }) => {
 					 </NavigateIcon>
 				 )
 			}
-			<NavigateIcon linkTo="/merchantlogin" className="button-login">
+			<Button linkTo="/merchantlogin" className="button-login">
 				<button>Seller Login</button>
 			</NavigateIcon>
 			<ShoppingCart />

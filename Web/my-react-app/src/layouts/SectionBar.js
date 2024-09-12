@@ -4,7 +4,7 @@ import './styles/SectionBar.css';
 
 
  /**
-   A section bar that includes all the navigation menus
+   SectionBarLayout that includes all the navigation menus
    @param {}
  */
 const SectionBar = () => {

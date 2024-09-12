@@ -2,8 +2,8 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const SellerRoute = require('./API/SellerRoute');
-const CustomerRoute = require('./API/CustomerRoute');
+const SellerRoute = require('../api/config/SellerRoute');
+const CustomerRoute = require('../api/config/CustomerRoute');
 
 const app = express();
 const port = 3001;
