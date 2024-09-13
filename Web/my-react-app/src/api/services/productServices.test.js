@@ -63,10 +63,7 @@ describe('getOneProduct', () => {
 			
 			
 			expect(result.status).toBe(200);
-			expect(result.data.id).toEqual(mockData.id);
-			expect(result.data.name).toEqual(mockData.name);
-			expect(result.data.price).toEqual(mockData.price);
-			expect(result.data.description).toEqual(mockData.description);
+			expect(result.data).toEqual(mockData);
 		});
 		
 		it('should handle a 404 error gracefully', async () => {
