@@ -80,7 +80,7 @@ router.post('/updateProduct/:id', upload.single('image'), (req, res) => {
 
 
 // Route to handle admin validation
-router.post('/loginVal', (req, res) => {
+router.post('/adminLoginValidate', (req, res) => {
 	const { accountName, pw } = req.body;
 	console.log(accountName);
 	console.log(pw);

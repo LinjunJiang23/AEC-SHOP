@@ -1,9 +1,11 @@
+// src/api/config/CustomerRoute.test.js
 import request from 'supertest';
 import express from 'express';
 import Router from '../../router/Router'; 
 
 const app = express();
 app.use('/CustomerRoute', Router);
+
 
 describe('GET /productGeneral', () => {
 	it('should calculate toatlPages correctly', async () => {
