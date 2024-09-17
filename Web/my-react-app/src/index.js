@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import AppRouter from './Router/Router';
-import { AuthProvider } from './lib/Auth';
+import AppRouter from './router/Router';
+import { AuthProvider } from './api/Auth';
 
 ReactDOM.render(
 	<React.StrictMode>

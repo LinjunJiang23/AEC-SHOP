@@ -1,27 +1,10 @@
 // src/api/config/CustomerRoutes.js
 const express = require('express');
 const cors = require('cors');
-const connection = require('../db');
-
 const app = express();
 const router = express.Router();
 
 app.use(cors({ origin: 'http://localhost:3001' }));
-
-
-
-// Function to get product information
-const getData = (query, params) => {
-	return new Promise((resolve, reject) => {
-		connection.query(query, params, (err, results, fields) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(results);
-				}
-		});
-	});
-};
 
 // GET Route to display products
 router.get('/productGeneral', async (req, res) => {
@@ -72,12 +55,7 @@ router.get('/carttotal', async (req, res) => {
 	}	
 });
 
-// GET Route to handle accessing user information from session
-router.get('/user', (req, res) => {
-	const UserId = req.session.UserId;
-	console.log("The User ID from user api is:", UserId);
-	res.status(200).json(UserId);
-});
+
 
 // GET Route to get user's shopping cart
 router.get('/getShoppingCart', async (req, res) => {
@@ -144,71 +122,7 @@ router.post('/updateCartQuantity', async (req, res) => {
 });
 
 
-// POST Route to handle customer login requests
-router.post('/loginValidate', async (req, res) => {
-    const { accountName, pw } = req.body;
 
-    try {
-		const results = await getData(
-        'SELECT * FROM Customer WHERE username = ? AND hashed_password = ?',
-        [accountName, pw]);
-        if (results.length !== 0) {
-            console.log('Login successfully.');
-            req.session.UserId = results[0].user_id;
-			req.session.UserName = results[0].username;
-            console.log("req.session userId:", req.session.UserId);
-			console.log("req.session username:", req.session.UserName);
-            console.log("result is:", results);
-			res.status(200).json(results);
-        } else {
-            console.log("User name or password are wrong, try again");
-            res.status(401).json({ error: "User name or password are wrong, try again" });
-        }
-	} catch (error) {
-		console.error(error);
-        return res.status(500).json({ error: 'Internal server error' });
-	}
-});
-
-
-// POST Route to handle customer register requests
-router.post('/register', async (req, res) => {
-	const { accountName, pw, fname, lname, phoneNum, email } = req.body;
-	const currentDate = new Date();
-	const registeredDate = currentDate.toISOString().slice(0, 10);
-	
-	try {
-		const results = await getData('SELECT * FROM Customer WHERE email = ?', 
-		[email]);
-		if (results.length === 0) {
-			console.log("Email isn't used, able to create new user");
-			createNewUser(accountName, pw, fname, lname, phoneNum, email, registeredDate, res);
-		} else {
-			console.log("Email already exist, unable to create new user, login!");
-			res.status(409).json({ error: "Email already exist, unable to create new user, please login." });
-			return;
-		}
-	} catch (error) {	
-		console.error(error);
-		res.status(500).json({ error: error });
-		return;
-	}
-});
-
-const createNewUser = async (accountName, pw, fname, lname, phoneNum, email, registeredDate, res) => {
-	try {
-		const results = await getData(`INSERT INTO Customer (username, hashed_password, fname, lname, 
-		phone_number, email, registration_date) VALUES (?, ?, ?, ?, ?, ?, ?)
-		`,
-		[accountName, pw, fname, lname, phoneNum, email, registeredDate]);
-		console.log('Created User successfully');
-		res.status(200).json({ message: 'User created successfully' });
-	} catch (error) {
-		console.error('Error creating new user:', error);
-		res.status(500).json({ error: error });
-		return;
-	} 
-};
 
 
 
