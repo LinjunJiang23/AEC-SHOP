@@ -1,7 +1,7 @@
 // src/api/services/authServices.js
 import api from '../config/apiConfig';
 
-{ /* CustomerSide Services */ }
+/* CustomerSide Services */ 
 
 /**
  * loginValidate - POST FUNCTION to handle user login validation
@@ -29,14 +29,16 @@ export const loginValidate = async (accountName, pw) => {
  * @return { Promise<Object> || Error } Return user data or throw errors accordingly
  */
 export const registerUser = async (newUser) => {
+	const accountName = newUser.accountName;
+	const pw = newUser.pw;
+	const fname = newUser.fname;
+	const lname = newUser.lname;
+	const phoneNum = newUser.phoneNum;
+	const email = newUser.email;
 	try {
-	  const accountName = newUser.accountName;
-	  const	pw = newUser.pw;
-	  const fname = newUser.fname;
-	  const lname = newUser.lname;
-	  const phoneNum = newUser.phoneNum;
-	  const email = newUser.email;
-	  const response = await api.post('/auth/register', { accountName, pw, fname, lname, phoneNum, email });
+	  
+	  
+	  await api.post('/auth/register', { accountName, pw, fname, lname, phoneNum, email });
 	  return accountName;
 	} catch (error) {
 		console.error('User register error:', error);
@@ -51,7 +53,7 @@ export const registerUser = async (newUser) => {
 
 
 
-{ /* SellerSide Services*/ }
+/* SellerSide Services*/
 
 /**
  * adminLoginValidate - POST FUNCTION to handle admin login validation

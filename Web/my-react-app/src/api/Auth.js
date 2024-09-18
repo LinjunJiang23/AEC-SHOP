@@ -1,6 +1,6 @@
 // src/api/Auth.js
 import React, { createContext, useState, useEffect } from 'react';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { loginValidate, adminLoginValidate } from './services/authServices';
 import { errorHandler } from './utils/errorHandler';
 
@@ -19,11 +19,11 @@ const AuthProvider = ({ children }) => {
 	  const token = localStorage.getItem('token');
 	  const guestToken = localStorage.getItem('guestToken');
 	  if (token) {
-	    const decodedUser = jwt_decode(token);
+	    const decodedUser = jwtDecode(token);
 	    setLoggedIn(true);
 		setUser(decodedUser);
 	  } else if (guestToken) {
-		const decodedGuest = jwt_decode(guestToken);
+		const decodedGuest = jwtDecode(guestToken);
 		setGuestLoggedIn(true);
 		setGuest(decodedGuest);
 	  } else {
@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
 			const token = response.headers['authorization'].replace('Bearer ', '');
 			localStorage.setItem('guestToken', token);
 			setGuestLoggedIn(true);
-			const decodedGuest = jwt_decode(guestToken);
+			const decodedGuest = jwtDecode(token);
 			setGuest(decodedGuest);
 		} catch (error) {
 			console.error('Guest login error:', error);
@@ -65,10 +65,7 @@ const AuthProvider = ({ children }) => {
 			setGuestLoggedIn(false);
 			setGuest(null);
 			
-			
 			return response;
-			// Store JWT token in local storage
-			localStorage.setItem('token', userData.token);
 		} catch (error) {
 			setError(errorHandler(error));
 			setUser(null);
@@ -117,7 +114,7 @@ const AuthProvider = ({ children }) => {
 		}
 	};
 	
-	const contextValue = { guest, isGuest, guestLogin, user, isLoggedIn, userLogin, admin, isAdminLoggedIn, adminLogin, error };
+	const contextValue = { guest, isGuest, guestLogin, user, isLoggedIn, userLogin, admin, isAdminLoggedIn, adminLogin, logout, error };
 	
 	return (
 	  <Auth.Provider value={contextValue}>
