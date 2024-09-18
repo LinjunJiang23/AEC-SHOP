@@ -16,6 +16,9 @@ jest.mock('../../utils/queryUtils', () => ({
 }));
 app.use('/products', authOrCreateGuest, productRoutes);
 
+
+
+
 describe('authOrCreateGuest Tests', () => {
 	afterEach(() => {
 		jest.clearAllMocks();

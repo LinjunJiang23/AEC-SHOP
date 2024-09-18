@@ -1,6 +1,6 @@
 // src/server/controllers/authControllers.js
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const secretKey = 'May0623';
 const { passQuery } = require('../utils/queryUtils');
 

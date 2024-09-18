@@ -2,13 +2,13 @@
 const request = require('supertest');
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const authRoutes = require('../authRoutes');
 const { userLogin, userRegister } = require('../../controllers/authControllers');
 const { passQuery } = require('../../utils/queryUtils');
 
 jest.mock('jsonwebtoken');
-jest.mock('bcrypt');
+jest.mock('bcryptjs');
 jest.mock('../../controllers/authControllers');
 jest.mock('../../utils/queryUtils', () => ({
 	passQuery: jest.fn()
