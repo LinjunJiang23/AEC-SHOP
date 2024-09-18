@@ -12,9 +12,10 @@ exports.guestLogin = async (req, res) => {
 };
 
 exports.userLogin = async (req, res) => {
-    const { accountName, pw } = req.body;
+    
 
     try {
+		const { accountName, pw } = req.body;
 		const results = await passQuery(
         'SELECT * FROM Customer WHERE username = ? AND hashed_password = ?',
         [accountName, pw]
@@ -28,7 +29,7 @@ exports.userLogin = async (req, res) => {
 			  {
 				  userId: user.user_id,
 				  username: user.username,
-				  role: user.role
+				  role: 'user'
 			  },
 			  secretKey,
 			  { expiresIn: '1h' }

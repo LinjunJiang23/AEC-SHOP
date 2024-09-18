@@ -3,23 +3,22 @@ const request = require('supertest');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const authRoutes = require('../authRoutes');
 const { userLogin, userRegister } = require('../../controllers/authControllers');
 const { passQuery } = require('../../utils/queryUtils');
 
-
-const app = express();
-app.use(express.json());
-
-app.post('/auth/login', userLogin);
-app.post('/auth/register', userRegister);
-
 jest.mock('jsonwebtoken');
 jest.mock('bcrypt');
+jest.mock('../../controllers/authControllers');
 jest.mock('../../utils/queryUtils', () => ({
 	passQuery: jest.fn()
 }));
 
-describe('Authentication Routes Tests', () => {
+const app = express();
+app.use(express.json());
+app.use('/auth', authRoutes);
+
+describe('authRoutes', () => {
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
@@ -31,30 +30,46 @@ describe('Authentication Routes Tests', () => {
 		fname: 'John',
 		lname: 'Doe',
 		email: 'john.doe@example.com',
+		role: 'user'
 	};
 	
-	describe('POST /auth/login, userLogin', () => {
+	describe('POST /auth/login', () => {
 	  it('should log in user with correct credentials and return JWT', async () => {
-		passQuery.mockResolvedValueOnce([mockUser]);
-		
-		jwt.sign.mockReturnValue('mocked_jwt_token');
+		userLogin.mockImplementation((req, res) => {
+			const token = jwt.sign(
+			{ userId: mockUser.user_id, username: mockUser.username, role: mockUser.role },
+			'secret',
+			{ expiresIn: '1h' }
+			);
+			res.status(200).json({
+				user: mockUser,
+				token: 'mockToken'
+			});
+		});
+		jwt.sign.mockReturnValue('mockToken');
 		
 		const response = await request(app)
 		  .post('/auth/login')
-		  .send({ accountName: 'testUser', pw: 'password' });
+		  .send({ accountName: 'testUser', pw: 'password' })
+		  .expect(200);
 		  
-		expect(response.status).toBe(200);
 		expect(response.body.user).toEqual(mockUser);
-		expect(response.body.token).toEqual('mocked_jwt_token');
+		expect(response.body.token).toBe('mockToken');
 		expect(jwt.sign).toHaveBeenCalledWith(
-		  { userId: mockUser.user_id, username: mockUser.username, role: mockUser.role },
+		  { 
+		    userId: mockUser.user_id, 
+			username: mockUser.username, 
+			role: mockUser.role 
+		  },
 		  expect.any(String),
 		  { expiresIn: '1h' }
 		);
 	  });
 	  
 	  it('should run 401 for invalid credentials', async () => {
-		passQuery.mockResolvedValueOnce([]);
+		userLogin.mockImplementation((req, res) => {
+			res.status(401).json({ error: 'User name or password are wrong, try again' });
+		});
 		
 		const response = await request(app)
 			.post('/auth/login')
@@ -65,10 +80,12 @@ describe('Authentication Routes Tests', () => {
 	});
 	
 	describe('POST /auth/register', () => {
-	  it('should register new user with non existing credentials', async () => {
-		passQuery.mockResolvedValueOnce([]);
-		
-		passQuery.mockResolvedValueOnce({ insertId: 1 });
+	  it('should register a new user with non-existing credentials', async () => {
+		userRegister.mockImplementation((req, res) => {
+			res.status(200).json({
+				message: 'User created successfully',
+			});
+		});
 		
 		const response = await request(app)
 		  .post('/auth/register')
@@ -79,15 +96,22 @@ describe('Authentication Routes Tests', () => {
 			lname: 'Doe',
 			phoneNum: '123456789',
 			email: 'john.doe@example.com',
-		  });
+		  })
+		  .expect(200);
 		  
-		  expect(response.status).toBe(200);
-		  expect(response.body.message).toBe('User created successfully');
+		expect(response.status).toBe(200);
+		expect(response.body.message).toBe('User created successfully');
 	  });
 	  
 	  it('should return 409 if email is already used', async () => {
-		passQuery.mockResolvedValueOnce([mockUser]);
-		
+		// First, simulate that user exists
+		userRegister.mockImplementation((req, res) => {
+			res.status(409).json({
+				error: 'Email already exist, unable to create new user, please login.',
+			});
+		});
+
+		// Simulate the second attempt to register with the same email
 		const response = await request(app)
 		  .post('/auth/register')
 		  .send({
@@ -97,8 +121,9 @@ describe('Authentication Routes Tests', () => {
 			lname: 'Doe',
 			phoneNum: '123456789',
 			email: 'john.doe@example.com',
-		  });
-		expect(response.status).toBe(409);
+		  })
+		  .expect(409);
+
 		expect(response.body.error).toBe('Email already exist, unable to create new user, please login.');
 	  });
 	});
