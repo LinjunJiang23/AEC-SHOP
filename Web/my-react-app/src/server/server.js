@@ -1,9 +1,11 @@
+// src/server/server.js
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const SellerRoute = require('../api/config/SellerRoute');
-const CustomerRoute = require('../api/config/CustomerRoute');
+const routes = require('./routes');
+const authOrCreateGuest= require('./middleware/authMiddleware');
+
 
 const app = express();
 const port = 3001;
@@ -27,9 +29,8 @@ app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 // Serve static images
 app.use('/uploads', express.static('uploads'));
 
-// Mount API routes
-app.use('/SellerRoute', SellerRoute);
-app.use('/CustomerRoute', CustomerRoute);
+// Mount routes
+app.use('/', routes);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);

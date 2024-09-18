@@ -1,10 +1,10 @@
 import React from 'react';
 
 
- /**
-   A modal template that embeds content
-   @param {boolean} showModal - whether modal is showed or not
-   @param {string} title - heading of the modal
+/**
+ * A modal template that embeds content
+ * @param { boolean } showModal - whether modal is showed or not
+ * @param { string } title - heading of the modal
  */
 const Modal = ({ showModal, title, className, onClose, onOpen, onConfirm, onCancel, size, children }) => {
 	

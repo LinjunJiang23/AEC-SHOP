@@ -1,7 +1,7 @@
-// src/api/services/productServices.test.js
+// src/api/services/tests/productServices.test.js
 import api from '../config/apiConfig';
 import axiosMockAdapter from 'axios-mock-adapter';
-import { getProducts, getOneProduct } from './productServices';
+import { getProducts, getOneProduct } from '../productServices';
 
 const mock = new axiosMockAdapter(api);
 
@@ -11,12 +11,12 @@ const mock = new axiosMockAdapter(api);
   */
 
 { /* getProducts Tests */ }
-describe('getProducts', () => {
+describe('API productServices getProducts', () => {
 	afterEach(() => {
 		mock.reset();
 	});
 	
-	it('get fetch products in correct format', async () => {
+	it('should get products in correct format', async () => {
 		const mockData = {
 			products: [
 			{id: 1, name: 'Product 1'}, {id: 2, name: 'Product 2'}
@@ -26,7 +26,7 @@ describe('getProducts', () => {
 			totalItems: 5, // Total number of items in the mock data
 			totalPages: 3,
 		};
-		mock.onGet('/CustomerRoute/productGeneral', { params: { page: 1, limit: 10 } }).reply(200, mockData);
+		mock.onGet('/products', { params: { page: 1, limit: 10 } }).reply(200, mockData);
 		const result = await getProducts(1, 10);
 		
 		expect(result.status).toBe(200);
@@ -46,7 +46,7 @@ describe('getProducts', () => {
 });
 
 { /* getOneProduct Tests */ }
-describe('getOneProduct', () => {
+describe('API productServices getOneProduct', () => {
 		afterEach(() => {
 			mock.reset();
 		});
