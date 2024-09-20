@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Button from './Button';
+import Button from '../components/Button/Button';
 import PageList from './PageList';
 
 const PageDisplay = ({ className, currentPage, totalPages, onPageChange, paginationStyle }) => {

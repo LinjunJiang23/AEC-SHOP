@@ -1,16 +1,48 @@
+// src/layouts/Logo/Logo.js
 import React from 'react';
-import { Link } from 'react-router-dom';
-import './Logo.css';
+import PropTypes from 'prop-types';
 
-const Logo = ({ logoSrc, mainLink }) => (
-    <div className="logo">
-        <Link to={mainLink}>
+import NavigateIcon from '../../components/NavigateIcon/NavigateIcon';
+
+/**
+ * Logo
+ * @param {string} logoSrc - the source of logo
+ * @param {string} linkTo
+ * @param {string} className
+ * @param {string} style - style for NavigateIcon
+ * @param ...props
+ */
+const Logo = ({ logoSrc, linkTo, className, style, ...props }) => {
+	return (
+      <div 
+	    className={`logo ${className}`}
+		{...props}
+	  >
+        <NavigateIcon linkTo={linkTo} style={style}>
             <img 
                 src={logoSrc}
                 alt="logo"
             />
-        </Link>
-    </div>
-);
+        </NavigateIcon>
+      </div>
+	);
+};
+
+Logo.propTypes = {
+	logoSrc: PropTypes.string,
+	linkTo: PropTypes.string,
+	className: PropTypes.string,
+	style: PropTypes.oneOfType([
+		     PropTypes.object,
+			 PropTypes.number
+	]),
+};
+
+Logo.defaultProps = {
+	logoSrc: '',
+	linkTo: '/',
+	className: '',
+	style: {},
+};
 
 export default Logo;

@@ -1,12 +1,13 @@
 // src/server/routes/productRoutes.js
 const express = require('express');
 const cors = require('cors');
+const app = express();
+const router = express.Router();
 
 const { getProducts, getProductsById } = require('../controllers/productControllers');
 
-const router = express.Router();
 
-router.use(cors({ origin: 'http://localhost:3001' }));
+app.use(cors({ origin: 'http://localhost:3001' }));
 
 // GET Route to display products
 router.get('/', getProducts);

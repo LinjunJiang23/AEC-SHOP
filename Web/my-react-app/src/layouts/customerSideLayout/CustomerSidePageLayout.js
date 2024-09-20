@@ -1,15 +1,15 @@
+// src/layouts/CustomerSideLayout.js
 import React from 'react';
 
 // Import all components
-import CustomerSideHeader from '../CustomerSideHeader';
-import CustomerSideFooter from '../CustomerSideFooter';
+import CustomerSideHeader from './CustomerSideHeader';
+import CustomerSideFooter from './CustomerSideFooter';
 import SectionBar from '../SectionBar';
 
 
 
 // Layout for users, switch icon for logged in users
-const CustomerSideLayout = ({ isPending, children }) => {
-
+const CustomerSidePageLayout = ({ isPending, children }) => {
 
 	return (
 	<div className="layout">
@@ -23,4 +23,4 @@ const CustomerSideLayout = ({ isPending, children }) => {
 	);
 };
 
-export default CustomerSideLayout;
+export default CustomerSidePageLayout;

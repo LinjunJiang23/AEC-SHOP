@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import './styles/MerchantDashboard.css';
+import './MerchantDashboard.css';
 
 const Dashboard = () => {
 	return (

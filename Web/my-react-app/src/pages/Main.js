@@ -1,7 +1,20 @@
-import ProductGrid from '../../Component/ProductGrid';
+// src/pages/Main.js
+import { useEffect } from 'react';
+import ProductGrid from '../layouts/ProductGrid/ProductGrid';
+import { getProducts } from '../api/services/productServices';
 
-export default function Main() {
+const Main = () => {
+	let products = [];
+	
+	useEffect(() => {
+    getProducts(1, 10)
+	.then(results => {
+		products = results.products;
+	});
+  }, []);
 	return (
-		<ProductGrid/>
+		<ProductGrid limit={10} products={products}/>
 	);
-}
+};
+
+export default Main;

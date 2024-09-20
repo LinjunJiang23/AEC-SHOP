@@ -1,8 +1,9 @@
+// src/pages/customerSidePage/LoginFormPage.js
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Auth } from '../../lib/Auth';
+import { Auth } from '../../api/Auth';
 
-import './styles/LoginFormPage.css';
+import './LoginFormPage.css';
 
 
 const LoginForm = () => {

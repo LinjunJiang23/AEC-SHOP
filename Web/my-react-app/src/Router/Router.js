@@ -7,7 +7,7 @@ import SellerRoutes from './routes/SellerRoutes';
 
 
 // Import styles
-import '../styles/index.css';
+import '../index.css';
 
 // TBI: Loading animation...
 const Loading = () => (<div className="loading">Loading...</div>);

@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Auth } from '../../lib/Auth';
+import { Auth } from '../../api/Auth';
 
-import './styles/MerchantLoginPage.css';
+import './MerchantLoginPage.css';
 
 const MerchantLoginForm = () => {
 	const [accountName, setAccountName] = useState('');

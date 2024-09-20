@@ -1,8 +1,9 @@
 import React, { useEffect, useState, memo } from 'react';
 import { Link,  useNavigate } from 'react-router-dom';
-import Fetch from '../../lib/FetchProduct';
 
-import './styles/EditListingPage.css';
+import { getProducts } from '../../api/services/productServices';
+
+import './EditListingPage.css';
 
 
 //Front end function to update product information
@@ -167,7 +168,7 @@ const EditListingPage = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    Fetch('product').then((data) => setProducts(data));
+    getProducts(1, 10).then((data) => setProducts(data));
   }, [products]);
 
   return (

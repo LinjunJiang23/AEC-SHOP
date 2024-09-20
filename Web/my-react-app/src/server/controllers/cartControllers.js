@@ -1,7 +1,12 @@
-// src/server/controllers/cartControlers.js;
-import { passQuery } from '../utils/queryUtils';
+// src/server/controllers/cartControllers.js
+const { passQuery } = require('../utils/queryUtils');
 
-//GET function
+
+
+/** 
+ * getCartItems - helper function that retrieves cart items
+ * @param { number } userId
+ */
 const getCartItems = async (UserId, res) => {
     try {
 		const results = await passQuery(
@@ -18,46 +23,59 @@ const getCartItems = async (UserId, res) => {
             res.status(404).json({ message: 'Shopping cart is empty, please add items.' });
         }
     } catch (error) {
-		console.error('Error retrieving shopping cart items:', err);
+		console.error('Error retrieving shopping cart items:', error);
         res.status(500).json({ error: error });
 	}
 };
 
 
-//Function to update cart
+/** 
+ * updateCart - helper function that updates all relevant info in cart
+ */
 const updateCart = async (res) => {
-//Now updating all the relevant information of the cart item
 	try {
-		const results = await getData('CALL updateCart()',[]);
-		console.log('Cart updated successfully');
-		res.status(200).json({ message: "Success"});
+		const results = await passQuery(
+		  'CALL updateCart()',
+		  []
+		);
+		res.status(200).json({ message: "Successfully updated the cart."});
 	} catch (error) {
-		console.error('Error updating cart:', err);
-		res.status(500).json({error: err });
+		console.error('Error updating cart:', error);
+		res.status(500).json({error: error });
 		return;
 	}
 };
 
-// Function to create a shopping cart for a user if it doesn't exist
+/** 
+ * createShoppingCart - helper function that creates a shopping cart for user
+ * @param {number} UserId
+ * @param {number} ProductId
+ * @param {number} quantity
+ */
 const createShoppingCart = async (UserId, ProductId, quantity, res) => {
     try {
-		const results = await getData(
+		const results = await passQuery(
         'INSERT INTO Shopping_Cart (user_id) VALUES (?)',
         [UserId]);
 		console.log('Created new shopping cart for user successfully');
         // After creating the shopping cart, add the product to it
         addToCart(UserId, ProductId, quantity, res);
     } catch (error) {
-        console.error('Error creating shopping cart:', err);
+        console.error('Error creating shopping cart:', error);
         res.status(500).json({ error: 'Internal server error' });
         return;
     }
 };
 
-// Function to add a product to the shopping cart
+/**
+ * addToCart - helper function that add items to user's cart
+ * @param {number} UserId
+ * @param {number} ProductId
+ * @param {number} quantity
+ */
 const addToCart = async (UserId, ProductId, quantity, res) => {
     try {
-        const results = await getData('SELECT * FROM Shopping_Cart_Item WHERE user_id = ? AND product_id = ?',
+        const results = await passQuery('SELECT * FROM Shopping_Cart_Item WHERE user_id = ? AND product_id = ?',
         [UserId, ProductId]);
 		// If the product doesn't exist in the cart, insert it
         if (results.length === 0) {
@@ -67,42 +85,54 @@ const addToCart = async (UserId, ProductId, quantity, res) => {
             updateCartItem(UserId, ProductId, quantity, res);
         }
     } catch (error) {
-        console.error('Error retrieving shopping cart item:', err);
+        console.error('Error retrieving shopping cart item:', error);
         res.status(500).json({ error: 'Internal server error' });
         return;
     }
 };
-
-// Function to insert a new item into the shopping cart
+/** 
+ * insertCartItem - helper function that insert a new item into the shopping cart
+ * @param {number} UserId
+ * @param {number} ProductId
+ * @param {number} quantity
+ */
 const insertCartItem = async (UserId, ProductId, quantity, res) => {
     try {
-        const results = await getData('INSERT INTO Shopping_Cart_Item (user_id, product_id, quantity) VALUES (?, ?, ?)',
+        const results = await passQuery('INSERT INTO Shopping_Cart_Item (user_id, product_id, quantity) VALUES (?, ?, ?)',
         [UserId, ProductId, quantity]);
 		console.log('Product added to cart successfully, user:', UserId);
 		updateCart(res);
     } catch (error) {
-        console.error('Error adding product to cart:', err);
+        console.error('Error adding product to cart:', error);
         res.status(500).json({ error: 'Internal server error' });
         return;
     }
 };
 
-// Function to update the quantity of an existing item in the shopping cart
+/** 
+ * updateCartItem - helper function that update the quantity of an existing item in the shopping cart
+ * @param {number} UserId
+ * @param {number} ProductId
+ * @param {number} quantity
+ */
 const updateCartItem = async (UserId, ProductId, quantity, res) => {
     try {
-		const results = await getData(
+		const results = await passQuery(
         'UPDATE Shopping_Cart_Item SET quantity = quantity + ? WHERE user_id = ? AND product_id = ?',
         [quantity, UserId, ProductId]);
 		console.log('Product quantity updated in cart successfully');
 		updateCart(res);
     } catch (error) {
-        console.error('Error updating quantity of product in cart:', err);
-        res.status(500).json({ error: err });
+        console.error('Error updating quantity of product in cart:', error);
+        res.status(500).json({ error: error });
         return;
     }
 };
 
-export const getCart = async (req, res) => {
+/**
+ * getCart Controller - retrieves all information on user's cart
+ */
+exports.getCart = async (req, res) => {
 	const UserId = req.session.UserId;
 	try {
 		const results = await passQuery('SELECT * FROM Shopping_Cart WHERE user_id = ?',
@@ -125,7 +155,10 @@ export const getCart = async (req, res) => {
 	}
 };
 
-export const getCartTotal = async (req, res) => {
+/**
+ * getCartTotal Controller - retrieves user's cart total
+ */
+exports.getCartTotal = async (req, res) => {
 	const id = req.session.UserId;
 	try {
 		const result = await passQuery(
@@ -139,8 +172,10 @@ export const getCartTotal = async (req, res) => {
 	}	
 };
 
-
-export const updateQuantity = async (req, res) => {
+/**
+ * updateQuantity Controller - updates the cart items' quantity
+ */
+exports.updateQuantity = async (req, res) => {
 	const { quantity, productId } = req.body;
 	const UserId = req.session.UserId;
 
@@ -152,13 +187,16 @@ export const updateQuantity = async (req, res) => {
 		console.log('Shopping cart item retrieved successfully.');
 		updateCart(res);
 	} catch (error) {
-        console.error('Error updating cart quantity:', err);
+        console.error('Error updating cart quantity:', error);
         res.status(500).json({ error: error });
 		return;
     }
 };
 
-export const addItems = async (req, res) => {
+/**
+ * addItems Controller - add new items to the cart
+ */
+exports.addItems = async (req, res) => {
     const { id } = req.params;
 	const UserId = req.session.UserId;
 
@@ -168,7 +206,7 @@ export const addItems = async (req, res) => {
         [UserId]
 		);
 		if (results.length === 0) {
-			createShoppingCart(UserId, ProductId, req.body.quantity, res);
+			createShoppingCart(UserId, id, req.body.quantity, res);
 		} else {	
 			addToCart(UserId, ProductId, req.body.quantity, res);
 		}

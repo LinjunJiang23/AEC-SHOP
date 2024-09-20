@@ -2,7 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 
-import { getCart, getCartTotal, updateQuantity } from '../controllers/cartControllers';
+const { getCart, getCartTotal, updateQuantity, addItems } = require('../controllers/cartControllers');
 
 
 const app = express();

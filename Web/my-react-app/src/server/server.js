@@ -4,7 +4,6 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require('./routes');
-const authOrCreateGuest= require('./middleware/authMiddleware');
 
 
 const app = express();

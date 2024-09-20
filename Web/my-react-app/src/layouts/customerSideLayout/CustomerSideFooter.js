@@ -1,9 +1,7 @@
+// src/layouts/customerSideLayout/CustomerSideFooter.js
 import React from 'react';
 
-import Logo from '../Logo';
-
-// Import logo picture
-import logo from './logo.png';
+import Logo from '../../layouts/Logo/Logo';
 
 const Footer = ({ isPending }) => {
   return (  
@@ -11,7 +9,7 @@ const Footer = ({ isPending }) => {
 		opacity: isPending ? 0.5 : 1
 		}}>
 		<>
-			<Logo logoSrc={logo} mainLink={'/'}/>
+			<Logo />
 			<div className="contact">
 				<fieldset>
 					<legend>Contact Me</legend>

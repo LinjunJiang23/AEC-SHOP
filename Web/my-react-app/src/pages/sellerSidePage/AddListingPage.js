@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import FetchProduct from '../../lib/FetchProduct';
-import AddProduct from '../../lib/AddProduct';
+
 
 const AddListingPage = () => {
   const [productName, setProductName] = useState('');
