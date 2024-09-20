@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 
 //Import all layout
-import CustomerSideLayout from '../../layouts/CustomerSideLayout'; 
+import CustomerSidePageLayout from '../../layouts/customerSideLayout/CustomerSidePageLayout'; 
 
 
 
@@ -12,7 +12,7 @@ import ShoppingCartPage from '../../pages/customerSidePage/ShoppingCartPage';
 import ProductDetailPage from '../../pages/customerSidePage/ProductDetailPage';
 import LoginFormPage from '../../pages/customerSidePage/LoginFormPage';
 import RegisterFormPage from '../../pages/customerSidePage/RegisterFormPage';
-import MerchantLoginPage from '../../pages/customerSidePage/MerchantLoginPage';
+import MerchantLoginPage from '../../pages/sellerSidePage/MerchantLoginPage';
 import UserDetailPage from '../../pages/customerSidePage/UserDetailPage';
 
 const CustomerRouteConfig = ({ isPending }) => {
@@ -21,64 +21,64 @@ const CustomerRouteConfig = ({ isPending }) => {
 	{
 		path: '/',
 		element: (
-		  <CustomerSideLayout 
+		  <CustomerSidePageLayout 
 		    isPending={isPending}>
 			  <Main/>
-		  </CustomerSideLayout>
+		  </CustomerSidePageLayout>
 		)
 	},
 	{
 		path: '/loginform',
 		element: (
-		<CustomerSideLayout 
+		<CustomerSidePageLayout 
 		  isPending={isPending}>
 			<LoginFormPage />
-		</CustomerSideLayout>
+		</CustomerSidePageLayout>
 		)
 	},
 	{
 		path: '/registerform',
 		element: (
-		  <CustomerSideLayout 
+		  <CustomerSidePageLayout 
 		    isPending={isPending}>
 		      <RegisterFormPage />
-	  	  </CustomerSideLayout>		
+	  	  </CustomerSidePageLayout>		
 		)
 	},
 	{
 		path: '/productdetail/:id',
 		element: (
-		  <CustomerSideLayout 
+		  <CustomerSidePageLayout 
 			isPending={isPending}>
 			  <ProductDetailPage />
-		  </CustomerSideLayout>
+		  </CustomerSidePageLayout>
 		)
 	},
 	{
 		path: '/shoppingcart',
 		element: (
-		  <CustomerSideLayout 
+		  <CustomerSidePageLayout 
 			isPending={isPending}>
 			  <ShoppingCartPage />
-  		  </CustomerSideLayout>
+  		  </CustomerSidePageLayout>
 		)
 	},
 	{
 		path: '/userdetail',
 		element: (
-		  <CustomerSideLayout 
+		  <CustomerSidePageLayout 
 			isPending={isPending}>
 			  <UserDetailPage />
-		  </CustomerSideLayout>
+		  </CustomerSidePageLayout>
 		)
 	},
 	{
 		path: '/merchantlogin',
 		element: (
-		  <CustomerSideLayout 
+		  <CustomerSidePageLayout 
 			isPending={isPending}>
 			  <MerchantLoginPage />
-		  </CustomerSideLayout>
+		  </CustomerSidePageLayout>
 		)
 	}];
 	return routes;

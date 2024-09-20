@@ -11,9 +11,7 @@ describe('authServices', () => {
 	});
 	describe('loginValidate', () => {
 		const mockData = {
-				accountName: 'TestUser',
-				pw: 'TestPW',
-				user_id: 1,
+				token: '.'
 		};
 		it('should validate user login with correct credentials', async () => {
 			mock.onPost('/auth/login', { accountName: 'TestUser', pw: 'TestPW' })

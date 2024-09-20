@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from "react-icons/fa";
 
-import './styles/ShoppingCart.css';
+import './ShoppingCart.css';
 
 const ShoppingCart 	= () => (
 		<div className="shoppingcarticon">

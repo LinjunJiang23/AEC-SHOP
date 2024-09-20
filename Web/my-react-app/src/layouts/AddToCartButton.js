@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MdAddShoppingCart } from "react-icons/md";
 
-import './styles/AddToCartButton.css';
+import './AddToCartButton.css';
 
 
 const postToCart = (ProductId, quantity) => {

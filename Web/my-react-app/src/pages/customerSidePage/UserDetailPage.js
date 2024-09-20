@@ -4,7 +4,7 @@ import React from 'react';
 // Styles
 import { GiShoppingBag } from "react-icons/gi";
 import { RiProfileFill } from "react-icons/ri";
-import './styles/UserDetailPage.css';
+import './UserDetailPage.css';
 
 
 const UserDetailPage = () => (

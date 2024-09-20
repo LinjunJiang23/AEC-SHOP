@@ -2,13 +2,12 @@ import React, { useState, useEffect, useContext, memo } from 'react';
 import { Link } from 'react-router-dom';
 
 // Function
-import { Auth } from '../../lib/Auth';
-import Fetch from '../../lib/FetchShoppingCart';
+import { Auth } from '../../api/Auth';
 
 // Styles
 import { CiSquarePlus } from "react-icons/ci";
 import { CiSquareMinus } from "react-icons/ci";
-import './styles/ShoppingCartPage.css';
+import './ShoppingCartPage.css';
 
 const updateQuantity = async (quantity, productId) => {
   try {

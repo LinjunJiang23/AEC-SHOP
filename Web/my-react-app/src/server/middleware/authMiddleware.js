@@ -5,13 +5,13 @@ const secretKey = process.env.SECRET_KEY || 'May0623';
 
 const createGuestToken = () => {
 	const guestId = `guest_${Date.now()}`;
-	const guestUser = {
-		userId: guestId,
-		username: guestId,
-		role: 'guest'
-	};
-	return jwt.sign(
-		guestUser,
+	return jwt.sign({
+		  user: {
+			  userId: guestId,
+			  username: guestId
+		  },
+		  role: 'guest'
+		},
 		secretKey,
 		{ expiresIn: '1h' }
 	);
@@ -23,7 +23,15 @@ const createGuestToken = () => {
  * @return { Object } Decoded User
  */
 const verifyToken = (token) => {
-	return jwt.verify(token, secretKey);
+	return new Promise((resolve, reject) => {
+		jwt.verify(token, secretKey, (err, decoded) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(decoded);
+			}
+		});
+	});
 };
 
 /**
@@ -35,7 +43,6 @@ const authOrCreateGuest = async (req, res, next) => {
 		try {
 			const guestToken = await createGuestToken();
 			res.status(200).setHeader('Authorization', `Bearer ${guestToken}`);
-			req.user = jwt.decode(guestToken);
 			console.log('Guest creation request received at: ', new Date().toLocaleTimeString());
 			return next();
 		} catch (error) {

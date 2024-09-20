@@ -1,9 +1,10 @@
+// src/pages/customerSidePage/ProductDetailPage.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import AddToCartButton from '../../Component/AddToCartButton';
+import AddToCartButton from '../../layouts/AddToCartButton';
 
-import './styles/ProductDetailPage.css';
+import './ProductDetailPage.css';
 
 const ProductDetail = ({ product, setQuantity }) => {
    console.log("Parsed JSON data:", product);
