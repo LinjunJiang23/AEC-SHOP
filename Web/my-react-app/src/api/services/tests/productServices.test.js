@@ -1,10 +1,12 @@
 // src/api/services/tests/productServices.test.js
 import api from '../../config/apiConfig';
 import axiosMockAdapter from 'axios-mock-adapter';
-import { getProducts, getOneProduct } from '../productServices';
+import productServices from '../productServices';
+
 
 const mock = new axiosMockAdapter(api);
 
+const { getProducts, getOneProduct } = productServices;
 
  /**
   * TEST productServices

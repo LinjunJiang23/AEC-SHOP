@@ -2,13 +2,15 @@
 import React, { createContext, useState, useEffect } from 'react';
 
 
-import { loginValidate, adminLoginValidate } from './services/authServices';
-import { clearToken, saveToken, getToken, decodeToken } from './utils/tokenUtils';
+import authServices from './services/authServices';
+import localUtils from './utils/localUtils';
 import { errorHandler } from './utils/errorHandler';
 import api from './config/apiConfig';
 
 
 const Auth = createContext();
+const { loginValidate, adminLoginValidate } = authServices;
+const { setLocal, removeLocal } = localUtils;
 
 /** 
  * AuthProvider - Context Provider for authentication
@@ -19,7 +21,7 @@ const AuthProvider = ({ children }) => {
 	//State Managements
 	const [isLogIn, setLogIn] = useState(false);	
 	const [user, setUser] = useState(null);
-	const [role, setRole] = useState(null);
+	const [role, setRole] = useState('role');
 	const [error, setError] = useState(null);
 	
 	
@@ -30,7 +32,6 @@ const AuthProvider = ({ children }) => {
 	  
 	  try {
 	    if (token) {
-	      const decodedUser = decodeToken(token);
 		  setRole(decodedUser.role);
 		  setLogIn(true);
 		  setUser(decodedUser);
@@ -46,16 +47,16 @@ const AuthProvider = ({ children }) => {
 	}, []);
 	
 	const saveData = (decodedUser) => {
-		localStorage.setItem('user', decodedUser);
+		setLocal('username', decodedUser.username);
 		setLogIn(true);
-		setUser(decodedUser.user);
+		setUser(decodedUser.username);
 		setRole(decodedUser.role);
 	};
 	
 	const logout = () => {
 		clearToken();
-		localStorage.removeItem('user');
-		setUser(null);
+		removeLocal('username');
+		setUser('guest');
 		setLogIn(false);
 		setError(null);
 	};
@@ -66,9 +67,6 @@ const AuthProvider = ({ children }) => {
 			const response = await api.get('/products'); // This triggers the middleware
 			const token = response.headers.get('Authorization')?.replace('Bearer ', '');
 			logout();
-			saveToken(token);
-			console.log('Token:', token);
-			const decodedGuest = await decodeToken(token);
 			saveData(decodedGuest);
 		} catch (error) {
 			console.error('Guest login error:', error);
@@ -78,18 +76,14 @@ const AuthProvider = ({ children }) => {
 	
 	
 	
-	const userLogin = async (accountName, pw) => {
+	const userLogin = async (email, pw) => {
 		try {
-			const response = await loginValidate(accountName, pw);
-			const userData = response.data;
+			const data = await loginValidate(email, pw);
 			
 			//User log in successfully
 			logout(); //Clear all current data
-			saveToken(userData);
-			const decodedUser = await decodeToken(userData);
-			saveData(decodedUser);
+			saveData(data);
 	
-			return response; //This should be the account name of current user
 		} catch (error) {
 			logout(); //Clear all current data
 			setError(errorHandler(error));
@@ -102,13 +96,10 @@ const AuthProvider = ({ children }) => {
 	const adminLogin = async (accountName, pw) => {
 		try {
 			const response = await adminLoginValidate(accountName, pw);
-			const adminData = response.data;
+			const adminname = response.data;
 			
 			logout();
-			saveToken(adminData);
-			const decodedAdmin = await decodeToken(adminData);
-			saveData(decodedAdmin);
-			return response;
+			saveData(adminname);
 		} catch (error) {
 			logout();
 			setError(errorHandler(error));

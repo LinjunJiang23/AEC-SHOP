@@ -1,19 +1,22 @@
 // src/api/services/authServices.js
 import api from '../config/apiConfig';
 
-/* CustomerSide Services */ 
 
-/**
- * loginValidate - POST FUNCTION to handle user login validation
- * @param { string } accountName - used to validate user's account name
- * @param { string } pw - used to validate user's password
- * @return { Promise<Object> || Error } Return user data or throw errors accordingly
- */
-export const loginValidate = async (accountName, pw) => {
+
+const authServices = {
+ /* CustomerSide Services */ 
+	
+  /**
+   * loginValidate - POST FUNCTION to handle user login validation
+   * @param { string } accountName - used to validate user's account name
+   * @param { string } pw - used to validate user's password
+   * @return { Promise<Object> || Error } Return user data or throw errors accordingly
+   */
+  loginValidate: async (email, pw) => {
 	try {
-		const response = await api.post('/auth/login', { accountName, pw });
-		if (response.length !== 0) {
-			return response;
+		const { data } = await api.post('/auth/login', { email, pw });
+		if (data) {
+			return data;
 		} else {
 			throw new Error('Invalid password or account name.');
 		}
@@ -21,14 +24,14 @@ export const loginValidate = async (accountName, pw) => {
 		console.error('User login error:', error);
 		throw error;
 	}
-};
+   },
 
-/**
- * registerUser - POST FUNCTION to handle user registration
- * @param { Object } newUser - contains all input information
- * @return { Promise<Object> || Error } Return user data or throw errors accordingly
- */
-export const registerUser = async (newUser) => {
+  /**
+   * registerUser - POST FUNCTION to handle user registration
+   * @param { Object } newUser - contains all input information
+   * @return { Promise<Object> || Error } Return user data or throw errors accordingly
+   */
+  registerUser: async (newUser) => {
 	const accountName = newUser.accountName;
 	const pw = newUser.pw;
 	const fname = newUser.fname;
@@ -48,21 +51,21 @@ export const registerUser = async (newUser) => {
 	    }
 		throw error;
 	}
-};
+  },
 
 
 
 
-/* SellerSide Services*/
+  /* SellerSide Services*/
 
-/**
- * adminLoginValidate - POST FUNCTION to handle admin login validation
- * @param { string } accountName - used to validate admin's account name
- * @param { string } pw - used to validate admin's password
- * @return { Promise<Object> || Error } Return admin data or throw errors accordingly
- */
+  /**
+   * adminLoginValidate - POST FUNCTION to handle admin login validation
+   * @param { string } accountName - used to validate admin's account name
+   * @param { string } pw - used to validate admin's password
+   * @return { Promise<Object> || Error } Return admin data or throw errors accordingly
+   */
  
-export const adminLoginValidate = async (accountName, pw) => { 
+  adminLoginValidate: async (accountName, pw) => { 
 	try {
 		const response = await api.post('/auth/adminLogin', { accountName, pw });
 			if (response.status === 200) {
@@ -74,4 +77,7 @@ export const adminLoginValidate = async (accountName, pw) => {
 			console.error('Admin login error:', error);
 			throw error;
 		}
+  },
 };
+
+export default authServices;

@@ -1,7 +1,9 @@
 // src/api/services/tests/authServices.test.js
 import api from '../../config/apiConfig';
 import axiosMockAdapter from 'axios-mock-adapter';
-import { loginValidate, registerUser } from '../authServices';
+import authServices from '../authServices';
+
+const { loginValidate, registerUser } = authServices;
 
 const mock = new axiosMockAdapter(api);
 
@@ -14,7 +16,7 @@ describe('authServices', () => {
 				token: '.'
 		};
 		it('should validate user login with correct credentials', async () => {
-			mock.onPost('/auth/login', { accountName: 'TestUser', pw: 'TestPW' })
+			mock.onPost('/auth/login', { email: 'TestUser', pw: 'TestPW' })
 				.reply(200, mockData);
 			
 			const result = await loginValidate('TestUser', 'TestPW');
@@ -24,7 +26,7 @@ describe('authServices', () => {
 		});
 		
 		it('should report error with wrong credentials but status of 200', async () => {
-			mock.onPost('/auth/login', { accountName: 'wrongUser', pw: 'wrongPW' })
+			mock.onPost('/auth/login', { email: 'wrongUser', pw: 'wrongPW' })
 			    .reply(200, new Error('Invalid password or account name.'));
 			try {
 			  await loginValidate('wrongUser', 'wrongPW');
@@ -35,7 +37,7 @@ describe('authServices', () => {
 		});
 		
 		it('should report error with status code other than 200', async () => {
-			mock.onPost('/auth/login', { accountName: 'wrongUser', pw: 'wrongPW' })
+			mock.onPost('/auth/login', { email: 'wrongUser', pw: 'wrongPW' })
 			    .reply(409, new Error());
 			await expect(loginValidate('wrongUser', 'wrongPW')).rejects.toEqual(new Error('Request failed with status code 409'));
 		});
@@ -78,12 +80,6 @@ describe('authServices', () => {
 			  })
 		.reply(409, { error: "Email already exist, unable to create new user, please login." });
 			await expect(registerUser(mockData)).rejects.toEqual(new Error('Email already in use, try logging in or retrieving password/accountName'));
-		});
-		
-		it('should report error with status code other than 200', async () => {
-			mock.onPost('/auth/login', { accountName: 'wrongUser', pw: 'wrongPW' })
-			    .reply(500, { error: new Error() });
-			await expect(loginValidate('wrongUser', 'wrongPW')).rejects.toEqual(new Error('Request failed with status code 500'));
 		});
 	});
 });

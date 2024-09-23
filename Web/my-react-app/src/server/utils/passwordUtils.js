@@ -1,13 +1,17 @@
 // src/server/utils/passwordUtils.js
 const bcrypt = require('bcryptjs');
 
+const passwordUtils = {
 
-exports.hashPassword = async (password) => {
-  const salt = await bcrypt.genSalt(10);
-  return bcrypt.hash(password, salt);
+  hashPassword: async (password) => {
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt);
+  },
+
+  // Utility function to compare passwords
+  comparePassword: async (plainPassword, hashedPassword) => {
+    return bcrypt.compare(plainPassword, hashedPassword);
+  }
 };
 
-// Utility function to compare passwords
-exports.comparePassword = async (plainPassword, hashedPassword) => {
-  return bcrypt.compare(plainPassword, hashedPassword);
-};
+module.exports = passwordUtils;

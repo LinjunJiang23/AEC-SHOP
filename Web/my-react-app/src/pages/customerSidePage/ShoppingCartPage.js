@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, memo } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../../api/config/apiConfig';
 
 // Function
 import { Auth } from '../../api/Auth';
@@ -100,8 +101,7 @@ const ShoppingCartPage = () => {
   useEffect(() => {
     // Call fetchItems to fetch items when component mounts
     const fetchData = async () => {
-	  const userId = getUserId();
-	  setId(userId);
+	  setId(user);
       const itemsData = await Fetch("shoppingcart", userId);
       setItems(itemsData);
 	  const sub = await Fetch("carttotal", userId);
