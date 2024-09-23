@@ -1,7 +1,7 @@
 // src/server/middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const secretKey = process.env.SECRET_KEY || 'May0623';
+const secretKey = process.env.SECRET_KEY || 'default_key';
 
 const createGuestToken = () => {
 	const guestId = `guest_${Date.now()}`;
@@ -38,10 +38,12 @@ const verifyToken = (token) => {
  * MIDDLEWARE authOrCreateGuest - verifies if it is guest or user
  */
 const authOrCreateGuest = async (req, res, next) => {
-	const token = req.headers.authorization;
+	const token = req.headers.Authorization;
 	if (!token) {
 		try {
 			const guestToken = await createGuestToken();
+			res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+			res.setHeader('Access-Control-Expose-Headers', 'Authorization'); // Expose the Authorization header to the frontend
 			res.status(200).setHeader('Authorization', `Bearer ${guestToken}`);
 			console.log('Guest creation request received at: ', new Date().toLocaleTimeString());
 			return next();

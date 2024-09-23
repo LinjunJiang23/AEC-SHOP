@@ -19,8 +19,7 @@ export const getProducts = async (page, limit) => {
 				limit: limit
 			}
 		});
-		console.log('Fetched response is:', response.data);
-		return response.data;
+		return response;
 	} catch (error) {
 		console.error('Error:', error);
 		/* Add fall back here */
@@ -39,9 +38,8 @@ export const getOneProduct = async (id) => {
 		console.log('Fetched response is:', response);
 		if (response.length === 0)
 		{
-			/* Add fall back here */
+			throw new Error('Product not found');
 		}
-		console.log('Item fetched is:', response.data);
 		return response;
 	} catch (error) {
 		console.error('Error', error);

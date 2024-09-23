@@ -94,7 +94,7 @@ const MemoShoppingCartRow = memo(ShoppingCartRow);
 
 const ShoppingCartPage = () => {
   const [items, setItems] = useState([]);
-  const { getUserId } = useContext(Auth);
+  const { user } = useContext(Auth);
   const [subtotal, setSubtotal] = useState(0.00);
   const [user, setId] = useState();
   useEffect(() => {

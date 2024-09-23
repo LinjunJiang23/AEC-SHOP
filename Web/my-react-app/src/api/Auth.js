@@ -45,29 +45,31 @@ const AuthProvider = ({ children }) => {
 	  
 	}, []);
 	
+	const saveData = (decodedUser) => {
+		localStorage.setItem('user', decodedUser);
+		setLogIn(true);
+		setUser(decodedUser.user);
+		setRole(decodedUser.role);
+	};
+	
 	const logout = () => {
 		clearToken();
 		localStorage.removeItem('user');
-		
 		setUser(null);
 		setLogIn(false);
 		setError(null);
 	};
 	
+	
 	const guestLogin = async () => {
 		try {
 			const response = await api.get('/products'); // This triggers the middleware
-			console.log(response.headers);
-			const token = response?.headers['Authorization']?.replace('Bearer ', '');
-			console.log('token: ', token);
-
+			const token = response.headers.get('Authorization')?.replace('Bearer ', '');
 			logout();
 			saveToken(token);
-			setLogIn(true);
-			const decodedGuest = decodeToken(token);
-			localStorage.setItem('user', decodedGuest.user);
-			setUser(decodedGuest);
-			setRole('guest');
+			console.log('Token:', token);
+			const decodedGuest = await decodeToken(token);
+			saveData(decodedGuest);
 		} catch (error) {
 			console.error('Guest login error:', error);
 			setError('Failed to create guest session');
@@ -84,11 +86,8 @@ const AuthProvider = ({ children }) => {
 			//User log in successfully
 			logout(); //Clear all current data
 			saveToken(userData);
-			const decodedUser = decodeToken(userData);
-			localStorage.setItem('user', decodedUser.user);
-			setUser(decodedUser.user);
-			setLogIn(true);
-			setRole('user');
+			const decodedUser = await decodeToken(userData);
+			saveData(decodedUser);
 	
 			return response; //This should be the account name of current user
 		} catch (error) {
@@ -107,12 +106,8 @@ const AuthProvider = ({ children }) => {
 			
 			logout();
 			saveToken(adminData);
-			const decodedAdmin = decodeToken(adminData);
-			localStorage.setItem('user', decodedAdmin.user);
-			setUser(decodedAdmin.user);
-			setLogIn(true);
-			setRole('admin');
-			
+			const decodedAdmin = await decodeToken(adminData);
+			saveData(decodedAdmin);
 			return response;
 		} catch (error) {
 			logout();
