@@ -3,13 +3,14 @@ const express = require('express');
 const cors = require('cors');
 
 const { getCart, getCartTotal, updateQuantity, addItems } = require('../controllers/cartControllers');
-
+const authMiddleware = require('../middleware/authMiddleware');
 
 const app = express();
 const router = express.Router();
 
 app.use(cors({ origin: 'http://localhost:3001' }));
 
+router.use(authMiddleware);
 
 // GET to get user's shopping cart
 router.get('/', getCart);

@@ -4,16 +4,17 @@ const cors = require('cors');
 const app = express();
 const router = express.Router();
 
-const { getProducts, getProductsById } = require('../controllers/productControllers');
+const productControllers = require('../controllers/productControllers');
 
 
 app.use(cors({ origin: 'http://localhost:3001' }));
 
+
 // GET Route to display products
-router.get('/', getProducts);
+router.get('/', productControllers.getProducts);
 
 // GET Route to display product details
-router.get('/details/:id', getProductsById);
+router.get('/details/:id', productControllers.getProductsById);
 
 
 

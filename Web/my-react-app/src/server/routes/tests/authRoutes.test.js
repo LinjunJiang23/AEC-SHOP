@@ -57,7 +57,6 @@ describe('authRoutes', () => {
 		expect(response.body.token).toBe('mockToken');
 		expect(jwt.sign).toHaveBeenCalledWith(
 		  { 
-		    userId: mockUser.user_id, 
 			username: mockUser.username, 
 			role: mockUser.role 
 		  },

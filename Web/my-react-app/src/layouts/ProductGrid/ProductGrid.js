@@ -15,16 +15,16 @@ import { getProducts } from '../../api/services/productServices';
 // styles
 import './ProductGrid.css';
 
-const ProductGrid = ({ products, style, paginationStyle, className, ...props }) => {
+const ProductGrid = ({ style, paginationStyle, className, limit, ...props }) => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     getProducts(currentPage, limit)
 	.then(results => {
-		setProducts(results.products);
-		setCurrentPage(results.page);
-		setTotalPages(results.totalPages);
+		setProducts(results.data.products);
+		setCurrentPage(results.data.page);
+		setTotalPages(results.data.totalPages);
 		});
   }, [currentPage, limit]);
   

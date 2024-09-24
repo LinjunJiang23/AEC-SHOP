@@ -1,15 +1,15 @@
 // src/server/controllers/tests/productControllers.test.js
 const request = require('supertest');
 const express = require('express');
-const { getProducts, getProductsById } = require('../productControllers');
-const { passQuery } = require('../../utils/queryUtils');
+const productControllers = require('../productControllers');
+const queryUtils = require('../../utils/queryUtils');
 
 
 const app = express();
 app.use(express.json());
 
-app.get('/products', getProducts);
-app.get('/products/details/:id', getProductsById);
+app.get('/products', productControllers.getProducts);
+app.get('/products/details/:id', productControllers.getProductsById);
 
 jest.mock('../../utils/queryUtils', () => ({
 	passQuery: jest.fn()
@@ -28,14 +28,14 @@ describe('productControllers', () => {
 		    json: jest.fn()
 		  };
 
-		  passQuery.mockResolvedValue([
+		  queryUtils.passQuery.mockResolvedValue([
 		    { product_id: 1, name: 'Product 1' },
 		    { product_id: 2, name: 'Product 2' }
 		  ]);
 
-		  await getProducts(req, res);
+		  await productControllers.getProducts(req, res);
 
-		  expect(passQuery).toHaveBeenCalledWith('SELECT * FROM Product LIMIT ? OFFSET ?', [10, 0]);
+		  expect(queryUtils.passQuery).toHaveBeenCalledWith('SELECT * FROM Product LIMIT ? OFFSET ?', [10, 0]);
 		  expect(res.status).toHaveBeenCalledWith(200);
 		  expect(res.json).toHaveBeenCalledWith({
 		    products: [
@@ -55,9 +55,9 @@ describe('productControllers', () => {
 				status: jest.fn().mockReturnThis(),
 				json: jest.fn()
 			};
-			passQuery.mockResolvedValue([]);
+			queryUtils.passQuery.mockResolvedValue([]);
 			
-			await getProducts(req, res);
+			await productControllers.getProducts(req, res);
 			expect(res.status).toHaveBeenCalledWith(500);
 		});
 	});
@@ -70,10 +70,10 @@ describe('productControllers', () => {
 			  json: jest.fn()
 			};
 			
-			passQuery.mockResolvedValue([1]);
+			queryUtils.passQuery.mockResolvedValue([1]);
 			
-			await getProductsById(req, res);
-			expect(passQuery).toHaveBeenCalledWith('SELECT * FROM Product WHERE product_id = ?', [1]);
+			await productControllers.getProductsById(req, res);
+			expect(queryUtils.passQuery).toHaveBeenCalledWith('SELECT * FROM Product WHERE product_id = ?', [1]);
 			expect(res.status).toHaveBeenCalledWith(200);
 			expect(res.json).toHaveBeenCalledWith([1]);
 		});
@@ -86,9 +86,9 @@ describe('productControllers', () => {
 				status: jest.fn().mockReturnThis(),
 				json: jest.fn()
 			};
-			passQuery.mockResolvedValue([]);
+			queryUtils.passQuery.mockResolvedValue([]);
 			
-			await getProductsById(req, res);
+			await productControllers.getProductsById(req, res);
 			expect(res.status).toHaveBeenCalledWith(500);
 		});
 	});

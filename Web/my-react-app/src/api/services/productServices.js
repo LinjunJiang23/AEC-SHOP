@@ -1,16 +1,18 @@
-// src/api/config/apiConfig.js
+// src/api/services/productServices.js
 import api from '../config/apiConfig';
 
 
-/* Customer Side Services */
 
- /** 
-  * getProducts - GET FUNCTION that returns SOME information of requested products
-  *	@param { number } page - page number for pagination
-  *	@param { number } limit - number of items per page
-  *	@return { Promise<Object||null> } - Returns the response or null if an error occurs
- */
-export const getProducts = async (page, limit) => {
+const productServices = {
+  /* Customer Side Services */
+
+  /** 
+   * getProducts - GET FUNCTION that returns SOME information of requested products
+   *	@param { number } page - page number for pagination
+   *	@param { number } limit - number of items per page
+   *	@return { Promise<Object||null> } - Returns the response or null if an error occurs
+   */
+  getProducts: async (page, limit) => {
 	try {
 		const response = await api.get(`/products`, 
 		{
@@ -19,38 +21,36 @@ export const getProducts = async (page, limit) => {
 				limit: limit
 			}
 		});
-		console.log('Fetched response is:', response.data);
-		return response.data;
+		return response;
 	} catch (error) {
 		console.error('Error:', error);
 		/* Add fall back here */
 		return null;
 	}
-};
+  },
 
- /**
-  * getOneProduct - GET FUNCTION that returns ALL information of the requested products
-  * @param { number } id - the product id to find the product
-  * @return { Promise<Object||null> } - Returns the response or null if an error occurs
- */
-export const getOneProduct = async (id) => {
+  /**
+   * getOneProduct - GET FUNCTION that returns ALL information of the requested products
+   * @param { number } id - the product id to find the product
+   * @return { Promise<Object||null> } - Returns the response or null if an error occurs
+   */
+  getOneProduct: async (id) => {
 	try {
 		const response = await api.get(`/products/details/${id}`);
 		console.log('Fetched response is:', response);
 		if (response.length === 0)
 		{
-			/* Add fall back here */
+			throw new Error('Product not found');
 		}
-		console.log('Item fetched is:', response.data);
 		return response;
 	} catch (error) {
 		console.error('Error', error);
 		/* Add fall back here */
 		return null;
 	}
-};	
+  },
 
-/* Seller Side Services */ 
+  /* Seller Side Services */ 
 
  /** 
   * POST FUNCTION addProducts that returns ALL information of requested products
@@ -68,4 +68,6 @@ export const getOneProduct = async (id) => {
 		 /* Add fall back here */ 
 	//}
 //}; */
+};
 
+export default productServices;

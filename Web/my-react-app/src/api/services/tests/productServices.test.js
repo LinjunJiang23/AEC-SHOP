@@ -1,16 +1,18 @@
 // src/api/services/tests/productServices.test.js
 import api from '../../config/apiConfig';
 import axiosMockAdapter from 'axios-mock-adapter';
-import { getProducts, getOneProduct } from '../productServices';
+import productServices from '../productServices';
+
 
 const mock = new axiosMockAdapter(api);
 
+const { getProducts, getOneProduct } = productServices;
 
  /**
   * TEST productServices
   */
 
-{ /* getProducts Tests */ }
+ /* getProducts Tests */ 
 describe('API productServices getProducts', () => {
 	afterEach(() => {
 		mock.reset();
@@ -45,23 +47,23 @@ describe('API productServices getProducts', () => {
 	});	
 });
 
-{ /* getOneProduct Tests */ }
+ /* getOneProduct Tests */ 
 describe('API productServices getOneProduct', () => {
 		afterEach(() => {
 			mock.reset();
 		});
 		
-		it('get one product in correct format', async () => {
+		it('should get one product in correct format', async () => {
 			const mockData = {
 				id: 1,
 				name: 'Product 1',
 				price: 11,
 				description: 'Test Product 1',
 			};
-			mock.onGet(`/CustomerRoute/productDetail/${mockData.id}`).reply(200, mockData);
+			mock.onGet(`/products/details/${mockData.id}`).reply(200, mockData);
 			const result = await getOneProduct(mockData.id);
 			
-			
+			console.log(result);
 			expect(result.status).toBe(200);
 			expect(result.data).toEqual(mockData);
 		});
@@ -71,10 +73,24 @@ describe('API productServices getOneProduct', () => {
 			const result = await getOneProduct(1);
 			expect(result).toBeNull();
 		});
+		
+		it('should report null for unfound product', async () => {
+			const mockData = {
+				id: 1,
+				name: 'Product 1',
+				price: 11,
+				description: 'Test Product 1',
+			};
+			mock.onGet(`/products/details/2`).reply(404, mockData);
+			const result = await getOneProduct(2);
+			
+			expect(result).toBeNull();
+		});
+		
 });
 
 
-{/* addProducts Tests */}
+/* addProducts Tests */
 /* describe('addProducts', () => {
 	afterEach(() => {
 		mock.reset();
