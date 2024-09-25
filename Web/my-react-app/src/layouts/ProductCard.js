@@ -1,7 +1,12 @@
+// src/layouts/ProductCard.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const ProductCard = ({ product }) => (
+import AddToCartButton from './AddToCartButton';
+
+const ProductCard = ({ product }) => {
+ 
+  return (
    <div className="productcard">
      <Link to={`/productdetail/${product.product_id}`}
 		style={{ textDecoration: 'none' }} 
@@ -12,7 +17,9 @@ const ProductCard = ({ product }) => (
 		 <span className="summary-price">${product.price}</span>
        </div>
      </Link>
+	 <AddToCartButton item={product} quantity={1} />
   </div>
-);
+  );
+};
 
 export default ProductCard;

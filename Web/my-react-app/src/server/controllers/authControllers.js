@@ -22,9 +22,7 @@ createNewUser = async (accountName, pw, fname, lname, phoneNum, email, registere
 	} 
 };
 
-const authControllers = {
-	userLogin: async (req, res) => {
-		
+const userLogin = async (req, res) => {	
 		try {
 			const { email, pw } = req.body;
 			const results = await queryUtils.passQuery(
@@ -50,11 +48,11 @@ const authControllers = {
 		} catch (error) {
 			return res.status(500).json({ error: 'Internal server error' });
 		}
-	},
+};
 
 
 
-	userRegister: async (req, res) => {
+const userRegister = async (req, res) => {
 		const { accountName, pw, fname, lname, phoneNum, email } = req.body;
 		const currentDate = new Date();
 		const registeredDate = currentDate.toISOString().slice(0, 10);
@@ -73,7 +71,9 @@ const authControllers = {
 			console.error(error);
 			return res.status(500).json({ error: error });
 		}
-	}
 };
 
-module.exports = authControllers;
+module.exports = {
+	userLogin,
+	userRegister,
+};

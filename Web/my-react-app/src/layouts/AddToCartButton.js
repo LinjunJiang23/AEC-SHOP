@@ -1,43 +1,43 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+// src/layouts/AddToCartButton.js
+import { useContext } from 'react';
 import { MdAddShoppingCart } from "react-icons/md";
+
+import Button from '../components/Button/Button';
+
+
+import { Auth } from '../api/Auth';
+import { addToCart, addToGuestCart } from '../api/services/cartServices';
 
 import './AddToCartButton.css';
 
-
-const postToCart = (ProductId, quantity) => {
-	fetch(`http://localhost:3001/CustomerRoute/addToCart/${ProductId}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({ quantity: quantity }),
-		credentials: 'include'
-	})
-	.then(response => {
-		if (!response.ok) {
-			throw new Error('Failed to add item to cart');
+const AddToCartButton = ({ item, quantity }) => {
+	const { isLogIn } = useContext(Auth);
+	const handleAddToCart = async () => {
+		if (isLogIn) {
+			addToCart(item.product_id, quantity);
+		} else {	
+			const cartItem = {
+			  product_id: item.product_id,
+			  product_name: item.product_name,
+			  price: item.price,
+			  img_url: item.img_url,
+			  quantity: quantity,
+			};
+			addToGuestCart(cartItem, quantity);
 		}
-		return response.json();
-	})
-	.then(data => {
-		console.log(data.message);
-	})
-	.catch(error => {
-		console.error('Error adding item to cart:', error);
-	});
-};
-
-const AddToCartButton = ({ ProductId, quantity }) => (
-	  <div 
-	    className="button-addtocart" 
-		onClick={ () => postToCart(ProductId, quantity) }
+	};
+	  
+	return (
+	  <Button 
+	    className={"add-to-cart"} 
+		onClick={ () => handleAddToCart(item, quantity) }
 	  >
 			<MdAddShoppingCart 
 			    className="cart-icon" 
 			    size={50} // Adjust the size of the icon as needed
 			    color="#fff" />
-      </div>
-);
+      </Button>
+	);
+};
 
 export default AddToCartButton;

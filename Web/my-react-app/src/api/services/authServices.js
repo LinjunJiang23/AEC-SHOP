@@ -1,9 +1,6 @@
 // src/api/services/authServices.js
 import api from '../config/apiConfig';
 
-
-
-const authServices = {
  /* CustomerSide Services */ 
 	
   /**
@@ -12,7 +9,7 @@ const authServices = {
    * @param { string } pw - used to validate user's password
    * @return { Promise<Object> || Error } Return user data or throw errors accordingly
    */
-  loginValidate: async (email, pw) => {
+const loginValidate = async (email, pw) => {
 	try {
 		const { data } = await api.post('/auth/login', { email, pw });
 		if (data) {
@@ -24,14 +21,14 @@ const authServices = {
 		console.error('User login error:', error);
 		throw error;
 	}
-   },
+};
 
   /**
    * registerUser - POST FUNCTION to handle user registration
    * @param { Object } newUser - contains all input information
    * @return { Promise<Object> || Error } Return user data or throw errors accordingly
    */
-  registerUser: async (newUser) => {
+const registerUser = async (newUser) => {
 	const accountName = newUser.accountName;
 	const pw = newUser.pw;
 	const fname = newUser.fname;
@@ -51,7 +48,7 @@ const authServices = {
 	    }
 		throw error;
 	}
-  },
+};
 
 
 
@@ -65,7 +62,7 @@ const authServices = {
    * @return { Promise<Object> || Error } Return admin data or throw errors accordingly
    */
  
-  adminLoginValidate: async (accountName, pw) => { 
+const adminLoginValidate = async (accountName, pw) => { 
 	try {
 		const response = await api.post('/auth/adminLogin', { accountName, pw });
 			if (response.status === 200) {
@@ -77,7 +74,11 @@ const authServices = {
 			console.error('Admin login error:', error);
 			throw error;
 		}
-  },
 };
 
-export default authServices;
+
+export { 
+	loginValidate,
+	registerUser,
+	adminLoginValidate
+};

@@ -1,3 +1,4 @@
+// src/layouts/PageDisplay.js
 import React from 'react';
 
 import Button from '../components/Button/Button';
@@ -14,13 +15,7 @@ const PageDisplay = ({ className, currentPage, totalPages, onPageChange, paginat
 	};
 	
 	return (
-	  <div className={className}>
-	  {/* 
-		TBI:
-		1). Style:
-			Parse the array of paginationStyle to get button style
-			then pass it to the Button component.
-	  */}
+	  <div className={`pagination ${className}`}>
 		<Button onClick={handlePrevious} disabled={currentPage === 1}>
 			Previous Page
 		</Button>

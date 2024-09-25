@@ -1,50 +1,34 @@
 import React, { useState, useEffect, useContext, memo } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../../api/config/apiConfig';
 
-// Function
+// Components
+
+// API
 import { Auth } from '../../api/Auth';
+import { updateCartQuantity, getCartItems, getCartTotal, getGuestCartItems } from '../../api/services/cartServices';
+
 
 // Styles
 import { CiSquarePlus } from "react-icons/ci";
 import { CiSquareMinus } from "react-icons/ci";
 import './ShoppingCartPage.css';
 
-const updateQuantity = async (quantity, productId) => {
-  try {
-    const response = await fetch(`http://localhost:3001/CustomerRoute/updateCartQuantity`, {
-      method: 'POST',
-	  headers: {
-			'Content-Type': 'application/json',
-		},
-	  body: JSON.stringify({ quantity, productId }),
-	  credentials: 'include'    
-	});
-    if (!response.ok) {
-      throw new Error('Failed to update product quantity');
-    }
-    const data = await response.json();
-    console.log(data); // Log success message or handle response accordingly
-  } catch (error) {
-    throw new Error(`Error updating product: ${error.message}`);
-  }
-};
-
 const ShoppingCartItem = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity);
   const minusQ = () => {
 	const newq = quantity - 1;
 	setQuantity(newq);
-	updateQuantity(newq, item.product_id);
+	updateCartQuantity(newq, item.product_id);
   };
   
   const plusQ = () => {
 	const newq = quantity + 1;
 	setQuantity(newq);
-	updateQuantity(newq, item.product_id);
-  };
+	updateCartQuantity(newq, item.product_id);
+};
+  
   return (
-    <>
+    <div>
     <Link to={`/productdetail/${item.product_id}`} style={{ textDecoration: 'none' }}>
       <div className="item">
         <img className="summary-image" src={item.img_url} alt={item.product_name} />
@@ -68,7 +52,7 @@ const ShoppingCartItem = ({ item }) => {
 		   value="Delete"/>
 		</span>
 	  </div>
-    </>
+    </div>
 	);
 };
 //This prevents unnecessary rerendering.
@@ -76,7 +60,7 @@ const MemoShoppingCartItem = memo(ShoppingCartItem);
 
 
 const ShoppingCartRow = ({ items }) => {
-  if (items !== "")
+  if (items)
   {
 	return (
 		<ul className="shoppingcart-item-grid">
@@ -94,19 +78,24 @@ const MemoShoppingCartRow = memo(ShoppingCartRow);
 
 
 const ShoppingCartPage = () => {
+  const { user, isLogIn } = useContext(Auth);
   const [items, setItems] = useState([]);
-  const { user } = useContext(Auth);
   const [subtotal, setSubtotal] = useState(0.00);
-  const [user, setId] = useState();
   useEffect(() => {
     // Call fetchItems to fetch items when component mounts
     const fetchData = async () => {
-	  setId(user);
-      const itemsData = await Fetch("shoppingcart", userId);
-      setItems(itemsData);
-	  const sub = await Fetch("carttotal", userId);
-	  console.log(sub);
-	  setSubtotal(sub[0].cart_total);
+		if (isLogIn) {
+			const items = await getCartItems();
+			setItems(items);
+	    } else {
+			const items = await getGuestCartItems();
+			setItems(items);
+		}
+	  /* const sub = await getCartTotal();
+	  if (sub.data)
+	  {
+	    setSubtotal(sub.data[0].cart_total);
+	  } */
     };
     fetchData();
   }, [subtotal, items]); // Include fetchItems in the dependency array

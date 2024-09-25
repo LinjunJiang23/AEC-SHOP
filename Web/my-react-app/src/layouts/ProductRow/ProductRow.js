@@ -7,7 +7,6 @@ const ProductRow = ({ products }) => {
 		  {products.map((product, index) => (
 		  <li key={index}>
             <ProductCard product={product} />
-			console.log(product);
 		  </li>
 		  ))}
 		</ul>

@@ -12,18 +12,7 @@ const authMiddleware = async (req, res, next) => {
 	const token = getTokenFromSession(req);
 	
 	if (!token) {
-		try {
-			const guestName = `guest_${crypto.randomBytes(4).toString('hex')}_${Date.now()}`;
-			const guestToken = await createToken(guestName, guestName, 'guest');
-			await setTokenInSession(req, guestToken);
-			await setCookie(res, 'guest', guestName, { maxAge: 3600000 });
-			console.log('Guest creation request received at: ', new Date().toLocaleTimeString());
-			req.user = { username: guestName, role: 'guest' };
-			return next();
-		} catch (error) {
-			console.error('Error creating guest user:', error);
-			return res.status(500).json({ error: 'Internal server error' });
-		}
+		return res.status(401).json({ error: 'No user found' });
 	} else {
 		try {
 			const decoded = await verifyToken(token);
