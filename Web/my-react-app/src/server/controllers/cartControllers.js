@@ -66,11 +66,8 @@ const addItems = asyncHandler(async (req, res) => {
     const { product_id, quantity } = req.params;
 	const user_id = await getUserId(req);
 	
-	const results = await passQuery(
-      'SELECT * FROM Shopping_Cart WHERE user_id = ?',
-      [user_id]);
 	if (results.length === 0) {
-		return createShoppingCart(user_id, product_id, req.body.quantity, res);
+		return createShoppingCart(cart_id, product_id, req.body.quantity, res);
 	} else {	
 		return addToCart(user_id, product_id, req.body.quantity, res);
 	}
@@ -78,9 +75,22 @@ const addItems = asyncHandler(async (req, res) => {
         
 });
 
+/**
+ * deleteItems
+ */
+const deleteItems = asyncHandler(async (req, res) => {
+	const { product_id } = req.params;
+	const user_id = await getUserId(req);
+	
+	const results = await passQuery(
+	  'SELECT * FROM Shopping_Cart WHERE user_id = ?',
+	);
+});
+
 module.exports = { 
 	getCart, 
 	getCartTotal, 
 	updateQuantity, 
 	addItems,
+	deleteItems
 };

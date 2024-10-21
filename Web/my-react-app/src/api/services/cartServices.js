@@ -10,14 +10,6 @@ const updateCartQuantity = async (quantity, product_id) => {
     throw new Error(`Error updating product: ${error.error}`);
   }
 };
-const getCartTotal = async () => {
-  try {
-	  const total = await api.get('/cart/total');
-	  return total;
-  } catch (error) {
-	throw new Error('Error getting cart total: ', error);
-  }
-};
 
 const getCartItems = async () => {
 	try {	
@@ -29,6 +21,37 @@ const getCartItems = async () => {
 	} catch (error) {
 	  throw new Error('Error getting cart items: ', error);
 	}
+};
+
+const addToCart = async (product_id, quantity) => {
+	try {
+		await api.post('cart/add', 
+		{ product_id: product_id, quantity: quantity });
+	} catch (error) {
+		throw new Error('Error adding item to cart:', error);
+	}
+};
+
+const deleteFromCart = async (product_id) => {
+	try {
+		const response = await api.post('/cart/delete');
+	} catch (error) {
+		throw new Error('Error deleting from cart: ', error);
+	}
+};
+
+			/* Guest Cart */
+
+const updateGuestCartQuantity = async (newItem, quantity) => {
+  const existingCart = JSON.parse(getLocal('guestCart')) || [];
+  
+  const itemIndex = existingCart.findIndex(item => item.product_id === newItem.product_id);
+  
+  if (itemIndex > -1) {
+	existingCart[itemIndex].quantity = quantity;
+  } 
+	
+  setLocal('guestCart', JSON.stringify(existingCart));
 };
 
 const getGuestCartItems = async () => {
@@ -46,28 +69,29 @@ const addToGuestCart = async (newItem, quantity) => {
 	const itemIndex = existingCart.findIndex(item => item.product_id === newItem.product_id);
 	
 	if (itemIndex > -1) {
-		existingCart[itemIndex].quantity += newItem.quantity;
+		existingCart[itemIndex].quantity += quantity;
 	} else {
-		existingCart.push(newItem);
-	}
+	  existingCart.push(newItem);
+    }
 	
 	setLocal('guestCart', JSON.stringify(existingCart));
 };
 
-const addToCart = async (product_id, quantity) => {
-	try {
-		const response = await api.post('cart/add', 
-		{ product_id: product_id, quantity: quantity });
-	} catch (error) {
-		throw new Error('Error adding item to cart:', error);
+const deleteFromGuestCart = async (product_id) => {
+	const existingCart = JSON.parse(getLocal('guestCart')) || [];
+	
+	const itemIndex = existingCart.findIndex(item => item.product_id === product_id);
+	
+	if (itemIndex > -1) {
+		existingCart.splice(itemIndex, 1);
 	}
+	setLocal('guestCart', JSON.stringify(existingCart));
 };
 
+
 export {
-	updateCartQuantity,
-	getCartTotal,
-	getCartItems,
-	getGuestCartItems,
-	addToCart,
-	addToGuestCart
+	updateCartQuantity, getCartItems, 
+	addToCart, deleteFromCart,
+	updateGuestCartQuantity, getGuestCartItems, 
+	addToGuestCart, deleteFromGuestCart 
 };

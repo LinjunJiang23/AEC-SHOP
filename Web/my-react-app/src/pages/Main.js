@@ -1,7 +1,7 @@
 // src/pages/Main.js
 import { useState, useEffect, useRef } from 'react';
-import ProductGrid from '../layouts/ProductGrid/ProductGrid';
-import PageDisplay from '../layouts/PageDisplay';
+import ProductGrid from '../layouts/productDisplay/ProductGrid';
+import PageDisplay from '../layouts/pagination/PageDisplay';
 
 import { getProducts } from '../api/services/productServices';
 

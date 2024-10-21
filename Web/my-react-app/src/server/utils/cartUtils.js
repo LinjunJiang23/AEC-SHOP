@@ -1,3 +1,50 @@
+// src/server/utils/cartUtils.js
+const { passQuery } = require('./queryUtils');
+
+
+
+/**
+ * checkCart - helper function that determine whether cart exists or not & create one if not
+ * @param { number } user_id
+ */
+const checkCart = async (user_id) => {
+	try {
+		const results = await passQuery(
+      'SELECT cart_id FROM Shopping_Cart WHERE user_id = ?',
+      [user_id]);
+	  if (results.length > 0) {
+		return results[0].cart_id;
+	  } else {
+		await passQuery(
+		  'INSERT INTO Shopping_Cart (cart_id) VALUE (?)',
+		  [user_id]);		
+	  }
+	  const newCart = await passQuery(
+		'SELECT cart_id FROM Shopping_Cart WHERE user_id = ?',
+		[user_id]);
+	  return newCart[0].cart_id;  
+	} catch (error) {
+		throw new Error('Database error: unable to create or find cart');
+	}
+};
+
+/**
+ * deleteFromCart - helper function that delete one cart item
+ * @param { number } product_id
+ */
+const deleteFromCart = async (product_id, res) => {
+	try {
+		const results = passQuery(
+		  'DELETE FROM Shopping_Cart_Item WHERE Shopping_Cart_Item.product_id = ?',
+		  [product_id]
+		);
+		return res.status(200).json({ message: 'Delete items successfully.' });
+	} catch (error) {
+		return res.status(500).json({ error: error });
+	}
+};
+
+
 /** 
  * getCartItems - helper function that retrieves cart items
  * @param { number } cart_id
@@ -5,14 +52,14 @@
 const getCartItems = async (cart_id, res) => {
     try {
 		const results = await passQuery(
-        'SELECT Shopping_Cart_Item.product_id, Product.price, Shopping_Cart_Item.quantity, Product.product_name, Product.img_url ' + 
-        'FROM Shopping_Cart_Item ' +
-        'INNER JOIN Product ON Shopping_Cart_Item.product_id = Product.product_id WHERE Shopping_Cart_Item.cart_id = ?',
-        [cart_id]
+          'SELECT Shopping_Cart_Item.product_id, Product.price, Shopping_Cart_Item.quantity, Product.product_name, Product.img_url ' + 
+          'FROM Shopping_Cart_Item ' +
+          'INNER JOIN Product ON Shopping_Cart_Item.product_id = Product.product_id WHERE Shopping_Cart_Item.cart_id = ?',
+          [cart_id]
 		);
 		if (results && results.length > 0) {
             console.log('Shopping cart item retrieved successfully.');	
-	        res.status(200).json(results); // Send the results as the response
+	        return res.status(200).json(results); // Send the results as the response
         } else {
             console.log('Shopping cart is empty');
             return res.status(404).json({ message: 'Shopping cart is empty, please add items.' });

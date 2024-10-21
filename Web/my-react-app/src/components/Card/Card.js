@@ -1,24 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Card = ({ children, className, ...props }) => {
+import './Card.css';
+
+const Card = ({ item_title, img_url, className, children, ...props }) => {
   return (
-	<div 
-		className={`card ${className}`}
-		{...props}
-	>
-	{children}
-	</div>
+    <div 
+      className={`card ${className}`} 
+      {...props}
+    >
+      <span className='card-title'>{item_title}</span>
+      <img src={img_url} alt={item_title || 'Card Image'} />
+      {children}
+    </div>
   );
 };
 
 Card.propTypes = {
-	children: PropTypes.node.isRequired,
-	className: PropTypes.string,
+  item_title: PropTypes.string,
+  img_url: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
 };
 
 Card.defaultProps = {
-	className: '',
+  item_title: 'Default Item Title',
+  img_url: 'https://via.placeholder.com/150', // Placeholder image
+  className: '',
 };
 
-export default Card;
+export default React.memo(Card);

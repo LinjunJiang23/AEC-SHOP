@@ -11,14 +11,14 @@ import api from '../config/apiConfig';
    */
 const loginValidate = async (email, pw) => {
 	try {
-		const { data } = await api.post('/auth/login', { email, pw });
-		if (data) {
-			return data;
+		const response = await api.post('/auth/login', { email, pw });
+		if (response.data) {
+			return response.data;
 		} else {
-			throw new Error('Invalid password or account name.');
+			throw new Error(response.data.error);
 		}
 	} catch (error) {
-		console.error('User login error:', error);
+		console.error('User login error:', error.message);
 		throw error;
 	}
 };

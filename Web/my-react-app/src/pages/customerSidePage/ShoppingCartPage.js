@@ -1,115 +1,95 @@
-import React, { useState, useEffect, useContext, memo } from 'react';
-import { Link } from 'react-router-dom';
+// src/pages/customerSidePage/ShoppingCartPage.js
+import React, { useState, useEffect, useContext } from 'react';
 
-// Components
+// Layouts
+import ShoppingCartRow from '../../layouts/shoppingCart/ShoppingCartRow';
+import PurchaseButton from '../../layouts/checkout/PurchaseButton';
 
 // API
 import { Auth } from '../../api/Auth';
-import { updateCartQuantity, getCartItems, getCartTotal, getGuestCartItems } from '../../api/services/cartServices';
-
+import { getCartItems, getGuestCartItems, deleteFromGuestCart, deleteFromCart } from '../../api/services/cartServices';
 
 // Styles
-import { CiSquarePlus } from "react-icons/ci";
-import { CiSquareMinus } from "react-icons/ci";
-import './ShoppingCartPage.css';
-
-const ShoppingCartItem = ({ item }) => {
-  const [quantity, setQuantity] = useState(item.quantity);
-  const minusQ = () => {
-	const newq = quantity - 1;
-	setQuantity(newq);
-	updateCartQuantity(newq, item.product_id);
-  };
-  
-  const plusQ = () => {
-	const newq = quantity + 1;
-	setQuantity(newq);
-	updateCartQuantity(newq, item.product_id);
-};
-  
-  return (
-    <div>
-    <Link to={`/productdetail/${item.product_id}`} style={{ textDecoration: 'none' }}>
-      <div className="item">
-        <img className="summary-image" src={item.img_url} alt={item.product_name} />
-        <span className="item-title">{item.product_name}</span>
-        <span className="item-price">${item.price}</span>
-      </div>
-	</Link>
-	  <div className="item-function">
-	    <span className="item-function-quantity">
-			<span>Quantity:</span>
-			<span><CiSquareMinus onClick={minusQ}/></span>
-			<span className="item-function-action-quantity">
-			  {quantity}
-			</span>
-			<span><CiSquarePlus onClick={plusQ}/></span>
-		</span>
-		<span className="item-function-delete">
-		<input 
-		   className="item-function-action-delete"
-	 	   type="submit"
-		   value="Delete"/>
-		</span>
-	  </div>
-    </div>
-	);
-};
-//This prevents unnecessary rerendering.
-const MemoShoppingCartItem = memo(ShoppingCartItem);
-
-
-const ShoppingCartRow = ({ items }) => {
-  if (items)
-  {
-	return (
-		<ul className="shoppingcart-item-grid">
-			{items.map((item, index) => (
-			<li key={index}>
-				<MemoShoppingCartItem item={item} />
-			</li>
-		))}
-	</ul>
-	);
-  }
-};
-//This prevents unnecessary rerendering.
-const MemoShoppingCartRow = memo(ShoppingCartRow);
+import './styles/ShoppingCartPage.css';
 
 
 const ShoppingCartPage = () => {
-  const { user, isLogIn } = useContext(Auth);
+  const { isLogIn } = useContext(Auth);
   const [items, setItems] = useState([]);
-  const [subtotal, setSubtotal] = useState(0.00);
+  const [subtotals, setSubtotals] = useState([]);
+  const [total, setTotal] = useState(0.00);
+
+  const handleSubtotalChange = (index, newSubtotal) => {
+
+    const updatedSubtotals = [...subtotals];
+    updatedSubtotals[index] = newSubtotal;
+    setSubtotals(updatedSubtotals);
+	
+	const updatedTotal = updatedSubtotals.reduce((acc, curr) => acc + curr, 0);
+	setTotal(updatedTotal);
+  };
+
+  const handleDeleteItem = async (product_id) => {
+	  const updatedItems = items.filter(item => item.product_id !== product_id);
+	  setItems(updatedItems);
+	  if (isLogIn) {
+	    await deleteFromCart(product_id);
+	  } else {
+		await deleteFromGuestCart(product_id);
+	  }
+  };
+
+
   useEffect(() => {
     // Call fetchItems to fetch items when component mounts
     const fetchData = async () => {
+		let fetchedItems = [];
 		if (isLogIn) {
-			const items = await getCartItems();
-			setItems(items);
+			fetchedItems = await getCartItems();
 	    } else {
-			const items = await getGuestCartItems();
-			setItems(items);
+			fetchedItems = await getGuestCartItems();
 		}
-	  /* const sub = await getCartTotal();
-	  if (sub.data)
-	  {
-	    setSubtotal(sub.data[0].cart_total);
-	  } */
+		if (fetchedItems)
+		{
+			setItems(fetchedItems);
+			const initialSubtotals = fetchedItems.map(item => item.price * item.quantity);
+			setSubtotals(initialSubtotals);
+		}
+		
+		
     };
+	
     fetchData();
-  }, [subtotal, items]); // Include fetchItems in the dependency array
+  }, [isLogIn]); // Include fetchItems in the dependency array
+
+
+
+  useEffect(() => {
+
+	const updatedTotal = subtotals.reduce((acc, curr) => acc + curr, 0);
+	setTotal(updatedTotal);
+
+  }, [subtotals]);  //Include subtotals as dependency array
+
+
 
   return (
   <div className="page">
     <h1>Shopping Cart</h1>
-	<MemoShoppingCartRow items={items}/>
+	{items.map((item, index) => (
+	  <ShoppingCartRow 
+	    key={item.product_id}
+		item={item} 
+		onSubtotalChange={(newSubtotal) => handleSubtotalChange(index, newSubtotal)}
+		onDeleteItem={handleDeleteItem}/>
+	))}
 	<div className="display-total">
-		<span>Subtotal:</span>
-		<span className="subtotal">
-		${subtotal}
+		<span>Total:</span>
+		<span className="total">
+		{total.toFixed(2)}
 		</span>
 	</div>
+	<PurchaseButton total={total} />
   </div>
   );
 };

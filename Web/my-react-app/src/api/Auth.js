@@ -1,11 +1,10 @@
 // src/api/Auth.js
 import React, { createContext, useState, useEffect } from 'react';
 
-import { createGuest } from './utils/guestUtils';
+import { createGuest } from './services/guestServices';
 import { loginValidate, adminLoginValidate } from './services/authServices';
-import { setLocal, removeLocal } from './utils/localUtils';
+import { setLocal, removeLocal, getLocal } from './utils/localUtils';
 import { errorHandler } from './utils/errorHandler';
-import api from './config/apiConfig';
 
 
 const Auth = createContext();
@@ -15,55 +14,74 @@ const Auth = createContext();
  * @param {element} children
  */
 const AuthProvider = ({ children }) => {
-	
-	//State Managements
+	//State Management
 	const [isLogIn, setLogIn] = useState(false);	
 	const [user, setUser] = useState(null);
 	const [role, setRole] = useState('');
 	const [error, setError] = useState(null);
 	
 	
-	
-	//Update fetching process
+	/* Initialize on mount to do the following:
+		
+	*/
 	useEffect(() => {
 	  const initAuth = async () => {
-		if (!isLogIn) {
+		const storedUser = getLocal('username');
+		
+		if (storedUser && isLogIn) {
+			setUser(storedUser);
+			setLogIn(true);
+			setRole('user');
+		} else {
 			const guestUser = createGuest();
 			setUser(guestUser);
 			setRole('guest');
 		}	
 	  };
-	  initAuth();	
+	  initAuth();
+	  console.log('Auth initialized.');
 	}, []);
 	
 	const logout = () => {
-		removeLocal('username');
-		setUser('guest');
+		if (getLocal('username')) {
+		  removeLocal('username');
+		}
+		setUser(null);
 		setLogIn(false);
 		setError(null);
 	};
 	
-	
-	
-	const login = async (email, pw) => {
+	const login = async ( email, pw ) => {
 		try {
 			const data = await loginValidate(email, pw);
 			//User log in successfully
-			logout(); //Clear all current data
-			setLocal('username', data.username);
-			setLogIn(true);
+			await logout(); //Clear all current data
+
+			await setLocal('username', data.username);
+			console.log('This is current user: ', user);
+			
 			setUser(data.username);
 			setRole(data.role);
+			
+			
+			setLogIn(true);
+			console.log('reached');
+			return data;
 		} catch (error) {
 			logout(); //Clear all current data
 			setError(errorHandler(error));
-			console.error('User login error:', error);
+			return errorHandler(error);
 		}
 	};
 	
+	useEffect(() => {
+		if (user && role) {
+		  console.log('This is role:', role);
+		  console.log('This is user', user);
+		}
+	}, [user, role]);
 	
-	
-	const adminLogin = async (accountName, pw) => {
+	const adminLogin = async ({ accountName, pw }) => {
 		try {
 			const response = await adminLoginValidate(accountName, pw);
 			logout();

@@ -1,15 +1,15 @@
 // src/server/controllers/authControllers.js
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET || 'default_key';
-const queryUtils = require('../utils/queryUtils');
-const passwordUtils = require('../utils/passwordUtils');
-const { setTokenInSession } = require('../utils/sessionUtils');
-const { createToken } = require('../utils/tokenUtils');
+const { passQuery } = require('../utils/queryUtils');
+const { hashPassword, comparePassword } = require('../utils/passwordUtils');
+const { checkIfUserExists, setUser } = require('../utils/userUtils');
 
-createNewUser = async (accountName, pw, fname, lname, phoneNum, email, registeredDate, res) => {
+//Helper function
+async function createNewUser(accountName, pw, fname, lname, phoneNum, email, registeredDate, res) {
 	try {
-		const hashedPW = await passwordUtils.hashPassword(pw);
-		const results = await queryUtils.passQuery(
+		const hashedPW = await hashPassword(pw);
+		const results = await passQuery(
 		`INSERT INTO Customer (username, hashed_password, fname, lname, 
 		phone_number, email, registration_date) VALUES (?, ?, ?, ?, ?, ?, ?)`,
 		[accountName, hashedPW, fname, lname, phoneNum, email, registeredDate]
@@ -22,32 +22,36 @@ createNewUser = async (accountName, pw, fname, lname, phoneNum, email, registere
 	} 
 };
 
-const userLogin = async (req, res) => {	
-		try {
-			const { email, pw } = req.body;
-			const results = await queryUtils.passQuery(
-			'SELECT * FROM Customer WHERE email = ?',
-			[email]
-			);
-			if (results.length > 0) {
-				
-				const user = results[0];
-				
-				const isMatch = await passwordUtils.comparePassword(pw, user.hashed_password);
-				if (isMatch) {
-				  // Generate a JWT token
-				  const token = createToken(user.username, user.user_id, 'user');
-				  setTokenInSession(req, token);
-				  return res.status(200).json({username: user.username, role: 'user'});
-				} else {
-				  return res.status(401).json({ error: 'Password are wrong.' });
-				}				
-			} else {
-				return res.status(401).json({ error: "User not found." });
-			}
-		} catch (error) {
-			return res.status(500).json({ error: 'Internal server error' });
+const userLogin = async (req, res) => {
+	const { email, pw } = req.body;
+
+	try {
+		const token = await checkIfUserExists(req);
+		if (token) {
+			return res.status(200).json({ message: 'User already logged in', redirect: '/' });
 		}
+			
+		const results = await passQuery(
+		  'SELECT * FROM Customer WHERE email = ?',
+		  [email]);
+				
+		if (results.length === 0) {
+			return res.status(401).json({ error: 'Invalid login credentials, user not found' });
+		}
+					
+		const user = results[0];
+					
+		const isMatch = await comparePassword(pw, user.hashed_password);
+		if (!isMatch) {
+			return res.status(401).json({ error: 'Password are wrong.' });
+		}
+		// Generate a JWT token and store the user in session
+		setUser(req, user);
+		return res.status(200).json(user.username);						
+	} catch (error) {
+		console.error('Login error: ', error);
+		return res.status(500).json({ error: 'Internal server error' });
+	}
 };
 
 
@@ -58,7 +62,7 @@ const userRegister = async (req, res) => {
 		const registeredDate = currentDate.toISOString().slice(0, 10);
 		
 		try {
-			const results = await queryUtils.passQuery(
+			const results = await passQuery(
 			  'SELECT * FROM Customer WHERE email = ?', 
 			  [email]
 			);

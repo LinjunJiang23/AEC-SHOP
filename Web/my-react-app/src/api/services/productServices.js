@@ -36,7 +36,6 @@ const getProducts = async (page, limit) => {
 const getOneProduct = async (id) => {
 	try {
 		const response = await api.get(`/products/details/${id}`);
-		console.log('Fetched response is:', response);
 		if (response.length === 0)
 		{
 			throw new Error('Product not found');

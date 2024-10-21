@@ -4,7 +4,7 @@ import React from 'react';
 // Import all components
 import CustomerSideHeader from './CustomerSideHeader';
 import CustomerSideFooter from './CustomerSideFooter';
-import SectionBar from '../SectionBar';
+import SectionBar from '../section/SectionBar';
 
 
 

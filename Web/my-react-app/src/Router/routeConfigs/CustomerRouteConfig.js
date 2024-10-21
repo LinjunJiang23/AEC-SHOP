@@ -1,19 +1,24 @@
 import React, { useState, useContext } from 'react';
 
-//Import all layout
+// Layout
 import CustomerSidePageLayout from '../../layouts/customerSideLayout/CustomerSidePageLayout'; 
 
-
-
-
-//Import all pages from Customer Side
+/* Pages */
 import Main from '../../pages/Main';
-import ShoppingCartPage from '../../pages/customerSidePage/ShoppingCartPage';
+// Product related
+import ProductGeneralPage from '../../pages/customerSidePage/ProductGeneralPage';
 import ProductDetailPage from '../../pages/customerSidePage/ProductDetailPage';
+// Cart related
+import ShoppingCartPage from '../../pages/customerSidePage/ShoppingCartPage';
+// Auth related
 import LoginFormPage from '../../pages/customerSidePage/LoginFormPage';
 import RegisterFormPage from '../../pages/customerSidePage/RegisterFormPage';
-import MerchantLoginPage from '../../pages/sellerSidePage/MerchantLoginPage';
+import ResetPWPage from '../../pages/customerSidePage/RegisterFormPage';
+// User related
 import UserDetailPage from '../../pages/customerSidePage/UserDetailPage';
+// Checkout related
+import PaymentPage from '../../pages/customerSidePage/PaymentPage';
+
 
 const CustomerRouteConfig = ({ isPending }) => {
 	
@@ -28,21 +33,12 @@ const CustomerRouteConfig = ({ isPending }) => {
 		)
 	},
 	{
-		path: '/loginform',
+		path: 'products',
 		element: (
 		<CustomerSidePageLayout 
-		  isPending={isPending}>
-			<LoginFormPage />
-		</CustomerSidePageLayout>
-		)
-	},
-	{
-		path: '/registerform',
-		element: (
-		  <CustomerSidePageLayout 
 		    isPending={isPending}>
-		      <RegisterFormPage />
-	  	  </CustomerSidePageLayout>		
+			  <ProductGeneralPage />
+		  </CustomerSidePageLayout>
 		)
 	},
 	{
@@ -64,6 +60,33 @@ const CustomerRouteConfig = ({ isPending }) => {
 		)
 	},
 	{
+		path: '/loginform',
+		element: (
+		<CustomerSidePageLayout 
+		  isPending={isPending}>
+			<LoginFormPage />
+		</CustomerSidePageLayout>
+		)
+	},
+	{
+		path: '/registerform',
+		element: (
+		  <CustomerSidePageLayout 
+		    isPending={isPending}>
+		      <RegisterFormPage />
+	  	  </CustomerSidePageLayout>		
+		)
+	},
+	{
+		path: '/resetpwform',
+		element: (
+		  <CustomerSidePageLayout
+		    isPending={isPending}>
+		      <ResetPWPage />
+		  </CustomerSidePageLayout>
+		)
+	},
+	{
 		path: '/userdetail',
 		element: (
 		  <CustomerSidePageLayout 
@@ -73,11 +96,11 @@ const CustomerRouteConfig = ({ isPending }) => {
 		)
 	},
 	{
-		path: '/merchantlogin',
+		path: '/payment',
 		element: (
-		  <CustomerSidePageLayout 
-			isPending={isPending}>
-			  <MerchantLoginPage />
+		  <CustomerSidePageLayout
+		    isPending={isPending}>
+			  <PaymentPage />
 		  </CustomerSidePageLayout>
 		)
 	}];
