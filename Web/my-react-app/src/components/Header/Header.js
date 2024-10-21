@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Logo from '../../layouts/Logo/Logo';
-import UserIcon from '../../layouts/UserIcon/UserIcon';
-import AuthButtons from '../../layouts/AuthButtons/AuthButtons';
+import UserIcon from '../../layouts/user/UserIcon';
+import AuthButtons from '../../layouts/auth/AuthButtons';
 
 /**
  * Header - COMPONENT template that handles basic header function
@@ -49,7 +49,7 @@ const Header = ({
 			  className="header-auth"
 			  aria-label={isLoggedIn ? "User Profile" : "Authentication"}>
 				{ isLoggedIn ? (
-				  logOutRelated ? logOutRelated : <UserIcon onLogOut={onLogOut}/> 
+				  logOutRelated ? logOutRelated : <UserIcon onLogOut={onLogOut} /> 
 				  ) : ( 
 					authRelated ? authRelated : <AuthButtons />
 				)}

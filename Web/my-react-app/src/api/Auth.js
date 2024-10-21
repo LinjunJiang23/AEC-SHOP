@@ -1,105 +1,94 @@
 // src/api/Auth.js
 import React, { createContext, useState, useEffect } from 'react';
 
-
-import authServices from './services/authServices';
-import localUtils from './utils/localUtils';
+import { createGuest } from './services/guestServices';
+import { loginValidate, adminLoginValidate } from './services/authServices';
+import { setLocal, removeLocal, getLocal } from './utils/localUtils';
 import { errorHandler } from './utils/errorHandler';
-import api from './config/apiConfig';
 
 
 const Auth = createContext();
-const { loginValidate, adminLoginValidate } = authServices;
-const { setLocal, removeLocal } = localUtils;
 
 /** 
  * AuthProvider - Context Provider for authentication
  * @param {element} children
  */
 const AuthProvider = ({ children }) => {
-	
-	//State Managements
+	//State Management
 	const [isLogIn, setLogIn] = useState(false);	
 	const [user, setUser] = useState(null);
-	const [role, setRole] = useState('role');
+	const [role, setRole] = useState('');
 	const [error, setError] = useState(null);
 	
 	
-	
-	//Update fetching process based on changes of ?
+	/* Initialize on mount to do the following:
+		
+	*/
 	useEffect(() => {
-	  const token = getToken();
-	  
-	  try {
-	    if (token) {
-		  setRole(decodedUser.role);
-		  setLogIn(true);
-		  setUser(decodedUser);
-	    } else {
-		  guestLogin();
-	    }
-	  } catch (error) {
-		console.error(error);
-		logout();
-		setError(errorHandler(error));
-	  }
-	  
+	  const initAuth = async () => {
+		const storedUser = getLocal('username');
+		
+		if (storedUser && isLogIn) {
+			setUser(storedUser);
+			setLogIn(true);
+			setRole('user');
+		} else {
+			const guestUser = createGuest();
+			setUser(guestUser);
+			setRole('guest');
+		}	
+	  };
+	  initAuth();
+	  console.log('Auth initialized.');
 	}, []);
 	
-	const saveData = (decodedUser) => {
-		setLocal('username', decodedUser.username);
-		setLogIn(true);
-		setUser(decodedUser.username);
-		setRole(decodedUser.role);
-	};
-	
 	const logout = () => {
-		clearToken();
-		removeLocal('username');
-		setUser('guest');
+		if (getLocal('username')) {
+		  removeLocal('username');
+		}
+		setUser(null);
 		setLogIn(false);
 		setError(null);
 	};
 	
-	
-	const guestLogin = async () => {
-		try {
-			const response = await api.get('/products'); // This triggers the middleware
-			const token = response.headers.get('Authorization')?.replace('Bearer ', '');
-			logout();
-			saveData(decodedGuest);
-		} catch (error) {
-			console.error('Guest login error:', error);
-			setError('Failed to create guest session');
-		}
-	};
-	
-	
-	
-	const userLogin = async (email, pw) => {
+	const login = async ( email, pw ) => {
 		try {
 			const data = await loginValidate(email, pw);
-			
 			//User log in successfully
-			logout(); //Clear all current data
-			saveData(data);
-	
+			await logout(); //Clear all current data
+
+			await setLocal('username', data.username);
+			console.log('This is current user: ', user);
+			
+			setUser(data.username);
+			setRole(data.role);
+			
+			
+			setLogIn(true);
+			console.log('reached');
+			return data;
 		} catch (error) {
 			logout(); //Clear all current data
 			setError(errorHandler(error));
-			console.error('User login error:', error);
+			return errorHandler(error);
 		}
 	};
 	
+	useEffect(() => {
+		if (user && role) {
+		  console.log('This is role:', role);
+		  console.log('This is user', user);
+		}
+	}, [user, role]);
 	
-	
-	const adminLogin = async (accountName, pw) => {
+	const adminLogin = async ({ accountName, pw }) => {
 		try {
 			const response = await adminLoginValidate(accountName, pw);
-			const adminname = response.data;
-			
 			logout();
-			saveData(adminname);
+			setLocal('username', response.username);
+			setLogIn(true);
+			setUser(response.username);
+			setRole(response.role);
 		} catch (error) {
 			logout();
 			setError(errorHandler(error));
@@ -110,7 +99,7 @@ const AuthProvider = ({ children }) => {
 	
 	const contextValue = { 
 		user, isLogIn, 
-		guestLogin, userLogin, adminLogin,
+		login, adminLogin,
 		error, logout, role 
 	};
 	

@@ -1,5 +1,5 @@
 // Import layout
-import SellerSideLayout from '../../layouts/SellerSideLayout';
+import SellerSideLayout from '../../layouts/sellerSideLayout/SellerSideLayout';
 
 // Import all pages from Seller Side
 import MerchantDashboard from '../../pages/sellerSidePage/MerchantDashboard';

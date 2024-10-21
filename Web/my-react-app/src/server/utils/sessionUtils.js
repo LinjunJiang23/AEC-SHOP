@@ -4,17 +4,18 @@ const getTokenFromSession = (req) => {
 	return req.session.token || null;
 };
 
-const setTokenInSession = (req, token) => {
-	req.session.token = token;
-};
-
 const getUserFromSession = (req) => {
 	return req.session.user || null;
+};
+
+const setTokenInSession = (req, token) => {
+	req.session.token = token;
 };
 
 const setUserInSession = (req, user) => {
 	req.session.user = user;
 };
+
 
 const clearSession = (req) => {
 	req.session.destroy((err) => {

@@ -1,26 +1,30 @@
 // src/api/utils/localUtils.js
 
-const localUtils = {
-
-  setLocal: (name, item) => {
+const setLocal = (name, item) => {
 	localStorage.setItem(name, item);
-  },
-
-  removeLocal: (name) => {
-	localStorage.removeItem(name);
-  },
-
-  getLocal: (item) => {
-	return localStorage.getItem(item);
-  },
-
-  clearLocal: () => {
-	localStorage.clear();
-  },
-
-  keyLocal: (key) => {
-	return localStorage.key(key);
-  },
 };
 
-export default localUtils;
+const removeLocal = (name) => {
+	localStorage.removeItem(name);
+};
+
+const getLocal = (item) => {
+	return localStorage.getItem(item);
+};
+
+const clearLocal = () => {
+	localStorage.clear();
+};
+
+const keyLocal = (key) => {
+	return localStorage.key(key);
+};
+
+
+export {
+	setLocal,
+	removeLocal,
+	getLocal,
+	clearLocal,
+	keyLocal
+};

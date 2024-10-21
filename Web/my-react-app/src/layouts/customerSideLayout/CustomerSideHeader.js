@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import Header from '../../components/Header/Header';
 
 // layouts
-import ShoppingCart from '../ShoppingCart';
+import ShoppingCartIcon from '../shoppingCart/ShoppingCartIcon';
 
 //api
 import { Auth } from '../../api/Auth';
@@ -14,13 +14,11 @@ import { Auth } from '../../api/Auth';
  * @param {boolean} isPending - identify whether element is loading or not
 */
 const CustomerSideHeader = ({ isPending }) => {
-	const { isLoggedIn } = useContext(Auth);
-
-	useEffect(() => {}, [isLoggedIn]);
+	const { isLogIn } = useContext(Auth);
 	
 	return (
-		<Header className="customerSide" isLoggedIn={isLoggedIn}>
-			<ShoppingCart />
+		<Header className="customerSide" isLoggedIn={isLogIn}>
+			<ShoppingCartIcon />
 		</Header>
 	);
 };

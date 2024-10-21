@@ -3,7 +3,6 @@ import api from '../config/apiConfig';
 
 
 
-const productServices = {
   /* Customer Side Services */
 
   /** 
@@ -12,7 +11,7 @@ const productServices = {
    *	@param { number } limit - number of items per page
    *	@return { Promise<Object||null> } - Returns the response or null if an error occurs
    */
-  getProducts: async (page, limit) => {
+const getProducts = async (page, limit) => {
 	try {
 		const response = await api.get(`/products`, 
 		{
@@ -27,17 +26,16 @@ const productServices = {
 		/* Add fall back here */
 		return null;
 	}
-  },
+ };
 
   /**
    * getOneProduct - GET FUNCTION that returns ALL information of the requested products
    * @param { number } id - the product id to find the product
    * @return { Promise<Object||null> } - Returns the response or null if an error occurs
    */
-  getOneProduct: async (id) => {
+const getOneProduct = async (id) => {
 	try {
 		const response = await api.get(`/products/details/${id}`);
-		console.log('Fetched response is:', response);
 		if (response.length === 0)
 		{
 			throw new Error('Product not found');
@@ -48,7 +46,7 @@ const productServices = {
 		/* Add fall back here */
 		return null;
 	}
-  },
+};
 
   /* Seller Side Services */ 
 
@@ -68,6 +66,8 @@ const productServices = {
 		 /* Add fall back here */ 
 	//}
 //}; */
-};
 
-export default productServices;
+export {
+	getProducts,
+	getOneProduct
+};

@@ -1,18 +1,20 @@
 // src/server/utils/cookieUtils.js
 
-const cookieUtils = {
-	setCookie: (res, name, value, options = {}) => {
+const setCookie = (res, name, value, options = {}) => {
 	  const defaults = { httpOnly: true, secure: true, sameSite: 'none' };
 	  res.cookie(name, value, { ...defaults, ...options });
-	},
+};
 	
-	getCookie: (req, name) => {
+const getCookie = (req, name) => {
 		return req.cookies[name];
-	},
+};
 	
-	clearCookie: (res, name) => {
+const clearCookie = (res, name) => {
 		res.clearCookie(name);
-	}
 };
 
-module.exports = cookieUtils;
+module.exports = {
+	setCookie,
+	getCookie,
+	clearCookie,
+};

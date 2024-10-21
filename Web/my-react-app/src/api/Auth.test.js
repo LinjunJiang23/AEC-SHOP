@@ -6,7 +6,6 @@ import Button from '../components/Button/Button';
 import { AuthProvider, Auth } from './Auth';
 import { loginValidate, adminLoginValidate } from './services/authServices';
 import api from './config/apiConfig';
-import { clearToken, saveToken, getToken, decodeToken } from './utils/tokenUtils';
 import { errorHandler } from './utils/errorHandler';
 
 // Mock dependencies
@@ -14,7 +13,6 @@ jest.mock('./services/authServices');
 jest.mock('./config/apiConfig', () => ({
 	get: jest.fn()
 }));
-jest.mock('./utils/tokenUtils');
 jest.mock('./utils/errorHandler');
 
 
@@ -25,13 +23,12 @@ describe('AuthProvider', () => {
   });
 
   const TestComponent = () => {
-    const { user, isLogIn, guestLogin, userLogin, adminLogin, error, logout, role } = React.useContext(Auth);
+    const { user, isLogIn, login, adminLogin, error, logout, role } = React.useContext(Auth);
     return (
       <div>
-        <p>{isLogIn ? `Logged in as ${role}` : 'Not logged in'}</p>
-        <Button onClick={ () => {userLogin('testUser', 'testPassword')} }>Login</Button>
-        <Button onClick={ () => {guestLogin()} }>Guest Login</Button>
-        <Button onClick={ () => {adminLogin('adminUser', 'adminPassword')} }>Admin Login</Button>
+        <p>{isLogIn ? `Logged in as ${role}` : `Should be ${role}`}</p>
+        <Button onClick={ () => {login('testUser@email.com', 'testPassword')} }>Login</Button>
+        <Button onClick={ () => {adminLogin('adminUser@email.com', 'adminPassword')} }>Admin Login</Button>
         <Button onClick={ () => {logout()} }>Logout</Button>
         {error && <p>{error}</p>}
       </div>
@@ -44,13 +41,12 @@ describe('AuthProvider', () => {
         <TestComponent />
       </AuthProvider>
     );
-    expect(screen.getByText('Not logged in')).toBeInTheDocument();
+    expect(screen.getByText('Should be guest')).toBeInTheDocument();
   });
 
   it('should handle user login', async () => {
     const mockUser = { username: 'testUser', role: 'user' };
-    const mockToken = 'mockToken';
-    loginValidate.mockResolvedValue({ data: { token: mockToken } });
+    loginValidate.mockResolvedValue(mockUser);
 
     render(
       <AuthProvider>
@@ -59,14 +55,12 @@ describe('AuthProvider', () => {
     );
 
     screen.getByText('Login').click(); // Trigger login
-    decodeToken.mockResolvedValue({user: 'mockUser'});
     await waitFor(() => expect(screen.getByText('Logged in as user')).toBeInTheDocument());
   });
 
   it('should handle admin login', async () => {
     const mockAdmin = { admin: 'adminData', role: 'admin' };
-	const mockToken = 'mockToken';
-    adminLoginValidate.mockResolvedValue({ data: {token: mockToken} });
+    adminLoginValidate.mockResolvedValue(mockAdmin);
 	
     render(
       <AuthProvider>
@@ -75,25 +69,7 @@ describe('AuthProvider', () => {
     );
 
     screen.getByText('Admin Login').click(); // Trigger admin login
-	decodeToken.mockResolvedValue({user: 'mockUser'});
     await waitFor(() => expect(screen.getByText('Logged in as admin')).toBeInTheDocument());
-  });
-
-  it('should handle guest login', async () => {
-    const mockToken = 'guestToken';
-    api.get.mockResolvedValue({ headers: { 'Authorization': `Bearer ${mockToken}` }, ok: true});
-	
-    render(
-      <AuthProvider>
-        <TestComponent />
-      </AuthProvider>
-    );
-
-    screen.getByText('Guest Login').click(); // Trigger guest login
-	decodeToken.mockResolvedValue({user: 'mockUser'});
-    await waitFor(() => expect(screen.getByText('Logged in as guest')).toBeInTheDocument());
-	expect(saveToken).toHaveBeenCalledWith(mockToken);
-
   });
 
   it('should handle logout', () => {
@@ -105,7 +81,6 @@ describe('AuthProvider', () => {
 
     screen.getByText('Logout').click(); // Trigger logout
 
-    expect(clearToken).toHaveBeenCalled();
-    expect(screen.getByText('Not logged in')).toBeInTheDocument();
+    expect(screen.getByText('Should be guest')).toBeInTheDocument();
   });
 });

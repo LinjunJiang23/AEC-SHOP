@@ -2,7 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 
-const { getCart, getCartTotal, updateQuantity, addItems } = require('../controllers/cartControllers');
+const { getCart, getCartTotal, updateQuantity, addItems, deleteItems } = require('../controllers/cartControllers');
 const authMiddleware = require('../middleware/authMiddleware');
 
 const app = express();
@@ -22,10 +22,10 @@ router.get('/total', getCartTotal);
 router.post('/updateQuantity', updateQuantity);
 
 // POST to add items to cart
-router.post('/add/:id', addItems); 
+router.post('/add', addItems); 
 
 // POST to delete items from cart
-//router.post('/delete', deleteItems);
+router.post('/delete', deleteItems);
 
 // POST to clear the cart
 //router.post('/clear', clearCart);

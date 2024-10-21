@@ -19,7 +19,7 @@ const AddListingPage = () => {
 	  formData.append('description', description);
 	  formData.append('price', price);
 
-      await AddProduct(formData);
+     // await AddProduct(formData);
       console.log("Success");
     } catch (error) {
       console.error('Error updating product:', error.message);
