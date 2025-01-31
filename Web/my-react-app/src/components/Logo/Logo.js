@@ -13,8 +13,8 @@ import NavigateIcon from '../../components/NavigateIcon/NavigateIcon';
  * @param ...props
  */
 const Logo = ({ logoSrc, linkTo, className, style, ...props }) => {
-	return (
-      <div 
+  return (
+    <div 
 	    className={`logo ${className}`}
 		{...props}
 	  >

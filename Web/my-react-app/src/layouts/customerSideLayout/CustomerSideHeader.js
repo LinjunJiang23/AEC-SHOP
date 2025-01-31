@@ -14,13 +14,13 @@ import { Auth } from '../../api/Auth';
  * @param {boolean} isPending - identify whether element is loading or not
 */
 const CustomerSideHeader = ({ isPending }) => {
-	const { isLogIn } = useContext(Auth);
+  const { isLogIn } = useContext(Auth);
 	
-	return (
-		<Header className="customerSide" isLoggedIn={isLogIn}>
-			<ShoppingCartIcon />
-		</Header>
-	);
+  return (
+	<Header className="customerSide" isLoggedIn={isLogIn}>
+	  <ShoppingCartIcon />
+	</Header>
+  );
 };
 		
 		
