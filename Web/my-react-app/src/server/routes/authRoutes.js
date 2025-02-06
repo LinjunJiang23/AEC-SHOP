@@ -13,7 +13,10 @@ router.post('/login', userLogin);
 // POST Route to handle customer register requests
 router.post('/register', userRegister);
 
-// POST Route to handle admin login requests
-//router.post('/adminLogin', adminLogin);
+// POST Route to handle merchant register requests
+router.post('/seller/register', merchantRegister);
+
+// POST Route to handle merchant login requests
+router.post('/seller/login', merchantLogin);
 
 module.exports = router;

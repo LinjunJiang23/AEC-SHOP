@@ -6,7 +6,6 @@ const router = express.Router();
 
 const { getProducts, getProductsById } = require('../controllers/productControllers');
 
-
 app.use(cors({ origin: 'http://localhost:3001' }));
 
 

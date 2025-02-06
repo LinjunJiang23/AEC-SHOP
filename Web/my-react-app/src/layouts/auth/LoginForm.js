@@ -10,7 +10,7 @@ import Button from '../../components/Button/Button';
 // API
 import { Auth } from '../../api/Auth';
 
-const LoginForm = () => {
+const LoginForm = ({ type }) => {
   const [email, setEmail] = useState('');
   const [pw, setPassword] = useState('');
   const [errors, setError] = useState('');
@@ -22,7 +22,7 @@ const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await login(email, pw); // Wait for the login function to complete
+      const response = ( type === "buyer" ) ? await login(email, pw) : ( type === "seller" ) ? await merchantlogin(email, pw) : console.error("Unrecognized type of login form"); // Wait for the login function to complete
       if (response && !response.error) {
         setShowModal(true);
         setEmail(''); // Clear the email field after successful login
@@ -50,7 +50,7 @@ const LoginForm = () => {
 
   const handleModalClose = () => {
     setShowModal(false);
-    nav('/');
+    (type === "buyer") ? nav('/') : (type === "seller") ? nav('/dashboard') : console.error("Login form type is incorrect");
   };
 
   return (
@@ -74,9 +74,9 @@ const LoginForm = () => {
           required={true}
         />
         <Button type="submit">Login</Button>
-        {errors && <div className="error-userlogin">{errors}</div>}
+        { errors && <div className="error-userlogin">{errors}</div> }
       </Form>
-      {showModal && (
+      { showModal && (
         <Modal
           title='Welcome!'
           onClose={handleModalClose}
