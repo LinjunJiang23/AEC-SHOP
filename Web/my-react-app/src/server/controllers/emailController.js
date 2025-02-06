@@ -1,7 +1,7 @@
 // src/server/controllers/emailController.js
 
 const sendResetEmail = async (email, OTP) => {
-  try {
+  try {  
 	const mailOptions = {
 	  from: `"AEC Shop" <${process.env.EMAIL_USER}>`,
 	  to: email, 
