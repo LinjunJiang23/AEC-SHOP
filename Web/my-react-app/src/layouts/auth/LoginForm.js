@@ -10,7 +10,7 @@ import Button from '../../components/Button/Button';
 // API
 import { Auth } from '../../api/Auth';
 
-const LoginForm = ({ type }) => {
+const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [pw, setPassword] = useState('');
   const [errors, setError] = useState('');
@@ -22,7 +22,7 @@ const LoginForm = ({ type }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = ( type === "buyer" ) ? await login(email, pw) : ( type === "seller" ) ? await merchantlogin(email, pw) : console.error("Unrecognized type of login form"); // Wait for the login function to complete
+      const response = await login(email, pw); // Wait for the login function to complete
       if (response && !response.error) {
         setShowModal(true);
         setEmail(''); // Clear the email field after successful login

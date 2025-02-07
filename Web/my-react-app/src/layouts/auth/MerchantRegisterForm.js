@@ -16,9 +16,10 @@ import PWNotification from './PWNotification';
 // API
 import { registerUser } from '../../api/services/authServices';
 
-/** 
- */
-const RegisterForm = () => {
+const MerchantRegisterForm = () => {
+  const [step, setStep] = useState(1);
+  
+  
   //Database parameters
   const [accountName, setAccountName] = useState('');
   const [pw, setPassword] = useState('');
@@ -27,7 +28,7 @@ const RegisterForm = () => {
   const [lname, setLName] = useState('');
   const [phoneNum, setPhone] = useState('');
   const [email, setEmail] = useState('');
-	
+  
   // Error message
   const [error, setError] = useState(null);
   const [focusIn, setFocusIn] = useState(null);
@@ -84,9 +85,16 @@ const RegisterForm = () => {
 	}
   };
 	
+  const handleStep = () => {
+	if (step === 1) {
+	  verifyInviteCode();
+	}
+  };
+  
   const pwStyle = {
 	borderColor: 'red'
   };
+	
 	
   useEffect(() => {
 	const checkConfirmPW = () => {
@@ -112,7 +120,7 @@ const RegisterForm = () => {
 		  maxLength="15"
 		  value={accountName}
 		  onChange={(e) => setAccountName(e.target.value)}
-		  required
+		  required={true}
 		/>
 		<Input
 		  title="Email"
@@ -121,7 +129,7 @@ const RegisterForm = () => {
 		  maxLength="20"
 		  value={email}
 		  onChange={(e) => setEmail(e.target.value)}
-		  required
+		  required={true}
 		/>
 		<Input
 		  title="Password"
@@ -130,7 +138,7 @@ const RegisterForm = () => {
 		  maxLength="15"
 		  value={pw}
 		  onChange={(e) => setPassword(e.target.value)}
-		  required
+		  required={true}
 		  onFocus={() => setShowNotification(true)}
 		  onBlur={() => setShowNotification(false)}
 		  style={!success ? pwStyle : {}} // If requirement not met, the border of the input is red
@@ -145,7 +153,7 @@ const RegisterForm = () => {
 		  value={confirmPW}
 		  onChange={(e) => setConfirmPassword(e.target.value)}
 		  style={showConfirmNotif ? pwStyle : {}}
-		  required
+		  required={true}
 		  ref={confirmPWRef}
 		/>
 		{showConfirmNotif && <span>Password does not match</span>}
@@ -155,7 +163,7 @@ const RegisterForm = () => {
 		  value={fname}
 		  maxLength="15"
 		  onChange={(e) => setFName(e.target.value)}
-		  required
+		  required={true}
 		/>
 		<Input
 		  title="Last Name"
@@ -172,7 +180,7 @@ const RegisterForm = () => {
 		  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
 		  onChange={(e) => setPhone(e.target.value)}
 		  required
-		/>
+		/> 
 		<Button type="submit">Register</Button>
 		  {error && <ErrorMessage message={error} focusIn={focusIn} />}
 		</Form>
