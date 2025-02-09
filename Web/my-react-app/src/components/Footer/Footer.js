@@ -5,7 +5,7 @@ import Logo from '../../layouts/Logo';
 import Contact from '../../layouts/Contact';
 
 
-const Footer = ({ className, isPending, logoRelated, contactRelated, ...props }) => {
+const Footer = ({ className = '', isPending = false, logoRelated, contactRelated, ...props }) => {
 	return (
 		<footer
 		  className={`footer ${className}`}
@@ -33,11 +33,6 @@ Footer.propTypes = {
 	isPending: PropTypes.bool,
 	logoRelated: PropTypes.node,
 	contactRelated: PropTypes.node,
-};
-
-Footer.defaultProps = {
-	className: '',
-	isPending: false,
 };
 
 export default Footer;

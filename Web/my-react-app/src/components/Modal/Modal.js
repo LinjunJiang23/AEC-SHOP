@@ -16,9 +16,9 @@ import './Modal.css';
  * @param { string } closeBut - label for the close button.
  */
 const Modal = ({ 
-  title, className, size, 
+  title = 'Modal', className, size, 
   onClose, onConfirm, onCancel,  
-  closeBut, confirmBut, cancelBut, 
+  closeBut = 'x', confirmBut = 'yes', cancelBut = 'no', 
   children 
 }) => {
 	

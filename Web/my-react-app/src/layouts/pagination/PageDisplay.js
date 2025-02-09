@@ -16,7 +16,7 @@ const PageDisplay = ({ className, currentPage, totalPages, onPageChange, paginat
 	
 	return (
 	  <div className={`pagination ${className}`}>
-		<Button onClick={handlePrevious} disabled={currentPage === 1}>
+		<Button onClick={handlePrevious} disabled={(currentPage === 1)}>
 			Previous Page
 		</Button>
 		<PageList 
@@ -24,7 +24,7 @@ const PageDisplay = ({ className, currentPage, totalPages, onPageChange, paginat
 		  totalPages={totalPages} 
 		  onPageChange={onPageChange}
 		/>
-		<Button onClick={handleNext} disabled={currentPage === totalPages}>
+		<Button onClick={handleNext} disabled={(currentPage === totalPages)}>
 			Next Page
 		</Button>
 	  </div>

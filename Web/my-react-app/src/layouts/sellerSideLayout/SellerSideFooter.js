@@ -1,7 +1,7 @@
 // src/layouts/sellerSideLayout/SellerSideFooter.js
 import React from 'react';
 
-import Logo from '../Logo/Logo';
+import Logo from '../../components/Logo/Logo';
 
 
 const SellerSideFooter = ({ isPending }) => {

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import './Card.css';
 
-const Card = ({ item_title, img_url, className, children, ...props }) => {
+const Card = ({ item_title = 'Default Item Title', img_url = 'https://via.placeholder.com/150', className = '', 
+				children, ...props }) => {
   return (
     <div 
       className={`card ${className}`} 
@@ -21,12 +22,6 @@ Card.propTypes = {
   img_url: PropTypes.string,
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
-};
-
-Card.defaultProps = {
-  item_title: 'Default Item Title',
-  img_url: 'https://via.placeholder.com/150', // Placeholder image
-  className: '',
 };
 
 export default React.memo(Card);

@@ -1,7 +1,7 @@
 // src/layouts/customerSideLayout/CustomerSideFooter.js
 import React from 'react';
 
-import Logo from '../../layouts/Logo/Logo';
+import Logo from '../../components/Logo/Logo';
 
 const Footer = ({ isPending }) => {
   return (  

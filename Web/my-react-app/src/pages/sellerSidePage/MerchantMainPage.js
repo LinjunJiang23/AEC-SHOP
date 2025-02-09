@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
+import Button from '../../components/Button/Button';
+
 /** 
  * 
  */
- 
 const MerchantMainPage = () => {
   const navigate = useNavigate();
   return (
@@ -16,3 +17,5 @@ const MerchantMainPage = () => {
 	</div>
   );
 };
+
+export default MerchantMainPage;

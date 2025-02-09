@@ -7,8 +7,8 @@ import { HiMiniXMark } from "react-icons/hi2";
 /**
  *
  */
-const Notification = ({ value, minLength, maxLength, containNumber, containUppercase, containSpecialChar, 
-						onSuccess, otherCondition, otherMessage, className }) => {
+const Notification = ({ value, minLength = null, maxLength = null, containNumber = false, containUppercase = false, 
+						containSpecialChar = false, onSuccess, otherCondition = false, otherMessage, className = '' }) => {
   const [isSuccess, setSuccess] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -68,16 +68,6 @@ Notification.propTypes = {
   otherCondition: PropTypes.node,
   otherMessage: PropTypes.string,
   className: PropTypes.string,
-};
-
-Notification.defaultProps = {
-  minLength: null,
-  maxLength: null,
-  containNumber: false,
-  containUppercase: false,
-  containSpecialChar: false,
-  otherCondition: false,
-  className: '',
 };
 
 export default React.memo(Notification);

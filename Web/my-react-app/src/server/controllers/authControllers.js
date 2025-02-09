@@ -76,17 +76,17 @@ const merchantLogin = async (req, res) => {
 };
 
 const merchantRegister = async (req, res) => {
-  const { email, accountName, pw, phoneNum, email, registerKey } = req.body;
+  const { email, accountName, pw, phoneNum, registerKey } = req.body;
   const currentDate = new Date();
   const registeredDate = currentDate.toISOString().slice(0, 10);
   
   try {
-	const results = await passQuery('SELECT * FROM Store WHERE email = ?', [email]);
-	if (results.length === 0) {
-	  await createNewStore(accountName, pw, email, phoneNum, email, registeredDate, res);
-	} else {
-	  return res.status(409).json({ error: "Store already exist, unable to create new store, try " });
-	}
+	// const results = await passQuery('SELECT * FROM Store WHERE email = ?', [email]);
+	// if (results.length === 0) {
+	  // await createNewStore(accountName, pw, email, phoneNum, email, registeredDate, res);
+	// } else {
+	  // return res.status(409).json({ error: "Store already exist, unable to create new store, try " });
+	//}
   } catch (error) {
   
   }

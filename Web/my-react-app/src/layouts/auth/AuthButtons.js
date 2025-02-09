@@ -11,22 +11,22 @@ const AuthButtons = () => {
   return (
 	<div className='section auth-buttons'>
 	  <div className='customer-auth'>
-		<Button onClick={ () => {
+		<Button onClick={() => {
 		  navigate('/loginform');
 		}}>
 		  Login
 		</Button>
 		<span>/</span>
-		<Button onClick={ () => {
+		<Button onClick={() => {
 		  navigate('/registerform');
 		}}>
 		  Register
 		</Button>
 	  </div>
 	  <div className='seller-auth'>
-		<Button onClick={ () => {
+		<Button onClick={() => {
 		  navigate('/sellerloginform');
-		}>
+		}}>
 		  I am a seller.
 		</Button>
 	  </div>

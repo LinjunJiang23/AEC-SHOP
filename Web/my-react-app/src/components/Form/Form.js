@@ -23,6 +23,4 @@ Form.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-
-
 export default React.memo(Form);

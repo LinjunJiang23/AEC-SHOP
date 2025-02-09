@@ -12,7 +12,7 @@ import NavigateIcon from '../../components/NavigateIcon/NavigateIcon';
  * @param {string} style - style for NavigateIcon
  * @param ...props
  */
-const Logo = ({ logoSrc, linkTo, className, style, ...props }) => {
+const Logo = ({ logoSrc = '', linkTo = '/', className = '', style = {}, ...props }) => {
   return (
     <div 
 	    className={`logo ${className}`}
@@ -36,13 +36,6 @@ Logo.propTypes = {
 		     PropTypes.object,
 			 PropTypes.number
 	]),
-};
-
-Logo.defaultProps = {
-	logoSrc: '',
-	linkTo: '/',
-	className: '',
-	style: {},
 };
 
 export default Logo;

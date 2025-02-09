@@ -6,6 +6,8 @@ import MerchantDashboardPage from '../../pages/sellerSidePage/MerchantDashboardP
 import EditListingPage from '../../pages/sellerSidePage/EditListingPage';
 import OrderManagementPage from '../../pages/sellerSidePage/OrderManagementPage';
 import AddListingPage from '../../pages/sellerSidePage/AddListingPage';
+import MerchantMainPage from '../../pages/sellerSidePage/MerchantMainPage';
+import MerchantLoginPage from '../../pages/sellerSidePage/MerchantLoginPage';
 
 const SellerRouteConfig = ({ isPending, isAdmin }) => {
   const routes = [

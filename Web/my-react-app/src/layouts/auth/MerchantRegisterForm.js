@@ -10,16 +10,17 @@ import Modal from '../../components/Modal/Modal';
 import Notification from '../../components/Notification/Notification';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
 
+//Hooks
+import useMultiStepForm from '../../hooks/useMultiStepForm';
+
 // Layouts
 import PWNotification from './PWNotification';
 
 // API
 import { registerUser } from '../../api/services/authServices';
 
+
 const MerchantRegisterForm = () => {
-  const [step, setStep] = useState(1);
-  
-  
   //Database parameters
   const [accountName, setAccountName] = useState('');
   const [pw, setPassword] = useState('');
@@ -84,31 +85,33 @@ const MerchantRegisterForm = () => {
 	  setShowModal(true);
 	}
   };
+  
+  const pwStyle = {borderColor: 'red'};
+  
+  const handleInviteCodeCheck = () => {
 	
-  const handleStep = () => {
-	if (step === 1) {
-	  verifyInviteCode();
-	}
   };
   
-  const pwStyle = {
-	borderColor: 'red'
+  const step1 = ({ updateFormData }) => {
+    <>
+	  <h2>Verify Invite Code</h2>
+	  <span>Enter the 6-digit code in the invitation email to verify before proceeding to seller registration.</span>
+	  <Input
+		title="Enter 6-digit Invite Code"
+		type="text"
+		pattern="/\d{6}/"
+		value={inviteCode}
+		onChange={(e) => setInviteCode(e.target.value)}
+		required={true}
+	  />
+	  <Button onClick={handleInviteCodeCheck}>
+	  <span>Give it 1-5 minutes for the email to arrive. If no email was received, please click <a>here</a> for help.</span>
+	</>
   };
-	
-	
-  useEffect(() => {
-	const checkConfirmPW = () => {
-	  if (confirmPW !== pw) {
-		setShowConfirmNotif(true);
-	  } else {
-		setShowConfirmNotif(false);
-	  }
-	};
-	checkConfirmPW();
-  }, [pw, confirmPW]);
-	
-  return (
-	<>
+  
+  const step2 = ({ updateFormData }) => {
+    <>
+	  <>
 	  <Form 
 		onSubmit={handleSubmit}
 		className="register-form"
@@ -194,18 +197,46 @@ const MerchantRegisterForm = () => {
 		    <span>{error}.</span>
 		  </Modal>
 		) : (
-	    <Modal onClose={() => {
-			setShowModal(false);
-		}}
+	    <Modal onClose={() => setShowModal(false)}
 			   closeBut='x'
-			   onClose={() => nav('/products')}
+			   onClose={() => nav('/dashboard')}
 			   title="Welcome!"
 			   onConfirm={() => nav('/loginform')}
 			   confirmBut="Login">
 		    <span>You successfully registered.</span>
-	     </Modal>
-	  ))}
+	     </Modal>  
+	  </>
+	))}
 	</>
+  };
+	
+  const steps = [step1, step2];
+	
+  useEffect(() => {
+	const checkConfirmPW = () => {
+	  if (confirmPW !== pw) {
+		setShowConfirmNotif(true);
+	  } else {
+		setShowConfirmNotif(false);
+	  }
+	};
+	checkConfirmPW();
+  }, [pw, confirmPW]);
+  
+  const { currentStep: StepComponent, currentStepIndex, nextStep, prevStep, updateFormData, formData, isLastStep } =   
+    useMultiStepForm(steps);
+  return (
+	<div>
+	  <StepComponent updateFormData={updateFormData}>
+	  <>
+		{currentStepIndex > 0 && <Button onClick={prevStep}></Button>}
+		{isLastStep ? (
+		  <Button onCLick={handleSubmit}>Signup</Button>
+		) : (
+		  <Button onClick={nextStep}>Next</Button>
+		)}
+	  </>
+	</div>
   );
 };
 

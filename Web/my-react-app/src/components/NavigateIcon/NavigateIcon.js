@@ -12,35 +12,32 @@ import { Link } from 'react-router-dom';
  * @param {Object} children 
  */
 const NavigateIcon = ({ className, linkTo, addLogic, children, style, ...props }) => {
+  const log = () => {
+	addLogic();
+  };
 	
-	const log = () => {
-		addLogic();
-	};
-	
-	return (
-	    <div 
-		  className={`navigate ${className}`}
-		  style={style}
-		  {...props}
-		>
-		  <Link to={linkTo}>
-			  {children}
-		  </Link>
-		</div>
-	);
+  return (
+    <div 
+	  className={`navigate ${className}`}
+	  style={style}
+	  {...props}
+	>
+	  <Link to={linkTo}>
+		  {children}
+	  </Link>
+	</div>
+  );
 };
 
 NavigateIcon.propTypes = {
-	className: PropTypes.string,
-	linkTo: PropTypes.string.isRequired,
-	addLogic: PropTypes.node,
-	children: PropTypes.node,
-	style: PropTypes.oneOfType([
-		     PropTypes.object,
-			 PropTypes.number
-	]),
+  className: PropTypes.string,
+  linkTo: PropTypes.string.isRequired,
+  addLogic: PropTypes.node,
+  children: PropTypes.node,
+  style: PropTypes.oneOfType([
+	PropTypes.object,
+	PropTypes.number
+  ]),
 };
-
-
 
 export default NavigateIcon;

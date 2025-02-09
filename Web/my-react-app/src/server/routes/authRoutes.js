@@ -1,7 +1,7 @@
 // src/server/routes/authRoutes.js
 const express = require('express');
 const cors = require('cors');
-const { userLogin, userRegister } = require('../controllers/authControllers');
+const { userLogin, userRegister, merchantRegister, merchantLogin } = require('../controllers/authControllers');
 const app = express();
 const router = express.Router();
 

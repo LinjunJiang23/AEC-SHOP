@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
-const Input = forwardRef(({ title, type, onChange, placeholder, value, required, className, ...props }, ref) => {
+const Input = forwardRef(({ title, type = "text", onChange, placeholder, value, required = false, className = '', ...props }, ref) => {
   const inputId = `${title.replace(/\s+/g, '-').toLowerCase()}-input`; // Generate a unique ID for the input
 
   return (
@@ -31,12 +31,6 @@ Input.propTypes = {
   value: PropTypes.string,
   required: PropTypes.bool,
   className: PropTypes.string
-};
-
-Input.defaultProps = {
-  className: '',
-  required: false,
-  type: 'text'
 };
 
 export default React.memo(Input);

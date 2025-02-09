@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import './Grid.css';
 
-const Grid = ({ columns, gap, children, className, style, ...props }) => {
+const Grid = ({ columns = 'repeat(auto-fit, minmax(100px, 1fr))', gap = '16px', children, className = '', style = {}, ...props }) => {
   return (
     <div 
       className={`container-grid ${className}`}
@@ -12,7 +12,7 @@ const Grid = ({ columns, gap, children, className, style, ...props }) => {
         display: 'grid',
         gridTemplateColumns: columns,
         gap,
-        ...style  // Merge custom styles passed via the `style` prop
+        ...style 
       }}
       {...props}
     >
@@ -27,13 +27,6 @@ Grid.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   style: PropTypes.object,
-};
-
-Grid.defaultProps = {
-  columns: 'repeat(auto-fit, minmax(100px, 1fr))',
-  gap: '16px',
-  className: '',
-  style: {},
 };
 
 export default React.memo(Grid);

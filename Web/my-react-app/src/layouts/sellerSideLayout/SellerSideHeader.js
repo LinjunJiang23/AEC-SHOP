@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Import all components
-import Logo from '../Logo/Logo';
+import Logo from '../../components/Logo/Logo';
 
 // Import logo picture
 
